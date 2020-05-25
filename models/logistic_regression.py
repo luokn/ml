@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+# @Date  : 2020/5/21
+# @Author: Luokun
+# @Email : olooook@outlook.com
 
-Python实现：
-```python
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class LogisticRegression:
@@ -41,12 +44,6 @@ class LogisticRegression:
         b = np.zeros([len(x)])
         b[x > threshold] = 1
         return b
-```
 
 
-真实值：
-![真实值](../images/logistic/0.png)
 
-
-预测值：
-![预测值](../images/logistic/1.png)
