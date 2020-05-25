@@ -8,24 +8,20 @@ import numpy as np
 
 class LogisticRegression:
     """
-    Logistic regression classifier(逻辑斯蒂回归)
+    Logistic regression classifier(逻辑斯蒂回归分类器)
     """
 
-    def __init__(self, input_dim, lr):
-        """
-        :param input_dim: 输入特征长度
-        :param lr: 学习率
-        """
+    def __init__(self, input_dim: int, lr: float):
         self.weights = np.random.randn(input_dim + 1)  # 随机初始化参数
-        self.lr = lr
+        self.lr = lr  # 学习率
 
-    def fit(self, X, Y):
+    def fit(self, X: np.ndarray, Y: np.ndarray):
         x_pad = pad(X)  # 为X填充1作为偏置
         pred = sigmoid(x_pad @ self.weights)  # 计算预测值
         grad = x_pad.T @ (pred - Y) / len(pred)  # 计算梯度
         self.weights -= self.lr * grad  # 沿负梯度更新参数
 
-    def predict(self, X):
+    def predict(self, X: np.ndarray):
         x_pad = pad(X)  # 为X填充1作为偏置
         pred = sigmoid(x_pad @ self.weights)  # 计算预测值
         return binarize(pred)  # 将(0, 1)之间分布的概率转化为{0, 1}标签
@@ -36,14 +32,10 @@ def pad(x):
 
 
 def sigmoid(x):
-    """
-    :param x:
-    :return: \frac{1}{1 + e^{-x}}
-    """
     return 1 / (1 + np.exp(-x))
 
 
 def binarize(x, threshold=.5):
-    b = np.zeros([len(x)], dtype=int)
-    b[x > threshold] = 1
-    return b
+    y = np.zeros_like(x, dtype=int)
+    y[x > threshold] = 1
+    return y
