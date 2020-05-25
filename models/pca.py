@@ -4,58 +4,21 @@
 # @Email : olooook@outlook.com
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 
-def pca(X: np.ndarray, K: int):
+class PCA:
     """
-    Principal Components Analysis
+    Principal Components Analysis(主成分分析)
     """
-    Y = X - X.mean(axis=0)
-    L, U = np.linalg.eig(Y.T @ Y)
-    topk = np.argsort(L)[::-1][:K]
-    return Y @ U[:, topk]
 
+    def __init__(self, k: int):
+        """
+        :param k: 保留的主成因个数
+        """
+        self.k = k
 
-"""
-----------------------TEST----------------------
-"""
-
-
-def plot_scatter(points, title):
-    p = points.reshape(3, -1, 2)
-    plt.scatter(p[0, :, 0], p[0, :, 1], color='r', marker='.')
-    plt.scatter(p[1, :, 0], p[1, :, 1], color='g', marker='.')
-    plt.scatter(p[2, :, 0], p[2, :, 1], color='b', marker='.')
-    plt.xlim(-6, 6)
-    plt.ylim(-6, 6)
-    plt.title(title)
-    plt.show()
-
-
-def test_pca():
-    scale = np.diag([1.5, .5])
-    theta = np.pi / 4
-    rotate = np.array([
-        [np.cos(theta), -np.sin(theta)],
-        [np.sin(theta), np.cos(theta)]
-    ])
-    x = np.random.randn(3, 100, 2)
-    x[1] += np.array([-2, 0])
-    x[2] += np.array([2, 0])
-
-    x = x.reshape(300, 2)
-    x = x @ scale @ rotate.T
-
-    # plot values before PCA
-    plot_scatter(x, 'Before PCA')
-
-    x = pca(x, 2)
-    plot_scatter(x, 'PCA 2D')
-
-    x = pca(x, 1)
-    plot_scatter(np.concatenate([x, np.zeros([len(x), 1])], axis=1), 'PCA 1D')
-
-
-if __name__ == '__main__':
-    test_pca()
+    def transform(self, X: np.ndarray):
+        Y = X - X.mean(axis=0)  # 去中心化
+        L, U = np.linalg.eig(Y.T @ Y)  # 对协方差矩阵进行特征值分解
+        topk = np.argsort(L)[::-1][:self.k]  # 找出特征值中前K大特征对应的索引
+        return Y @ U[:, topk]  # 将去中心化矩阵乘以前K大特征对应的特征向量

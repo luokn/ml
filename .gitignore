@@ -2,4 +2,6 @@
 .vs
 .vscode
 
+notebooks
+
 __pycache__/

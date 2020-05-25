@@ -4,73 +4,38 @@
 # @Email : olooook@outlook.com
 
 import random
+
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class KMeans:
     """
-    K-means clustering
+    K-means clustering(K均值聚类)
     """
 
     def __init__(self, k: int, eps: float = 1e-3, iterations=100):
+        """
+        :param k: 聚类类别数
+        :param eps: 迭代停止条件
+        :param iterations: 迭代最大次数
+        """
         self.k, self.eps, self.iterations = k, eps, iterations
-        self.centers = None
+        self.centers = None  # 中心点
 
     def predict(self, X: np.ndarray):
-        Y = np.zeros([len(X)], dtype=int)
-        self.centers = X[random.sample(range(len(X)), self.k)]  # centers
+        Y = np.zeros([len(X)], dtype=int)  # 预测值
+        self.centers = X[random.sample(range(len(X)), self.k)]  # 随机选择k个点作为中心点
         for _ in range(self.iterations):
             for i, x in enumerate(X):
+                # 更新每一个点所属的类别为离该点最近的中心点所在的索引
                 Y[i] = np.linalg.norm(self.centers - x, axis=1).argmax()
-            means = np.empty_like(self.centers)  # means
+            means = np.empty_like(self.centers)  # 各类别点的均值
             for i in range(self.k):
-                if np.any(Y == i):
-                    means[i] = np.mean(X[Y == i], axis=0)
-                else:
-                    means[i] = X[np.random.randint(0, len(X))]
+                if np.any(Y == i):  # 存在元素属于类别i
+                    means[i] = np.mean(X[Y == i], axis=0)  # 计算类别i所有点的均值
+                else:  # 不存在任何元素属于类别i
+                    means[i] = X[np.random.randint(0, len(X))]  # 随计选择一个点作为类别i的均值
             if np.max(np.abs(self.centers - means)) < self.eps:
-                break
-            self.centers = means
+                break  # 中心点最大更新值小于eps,推出迭代
+            self.centers = means  # 将更新后的均值作为各类别中心点
         return Y
-
-
-"""
-----------------------TEST----------------------
-"""
-
-
-def test_kmeans():
-    x = np.random.randn(3, 100, 2)
-    x[0] += np.array([2, 2])
-    x[1] += np.array([2, -2])
-
-    # plot real values
-    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
-    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
-    plt.scatter(x[2, :, 0], x[2, :, 1], color='b', marker='.')
-    plt.title("Real")
-    plt.show()
-
-    x = x.reshape(300, 2)
-    kmeans = KMeans(3)
-    pred = kmeans.predict(x)
-    centers = kmeans.centers
-
-    x0, c0 = x[pred == 0], centers[0]
-    x1, c1 = x[pred == 1], centers[1]
-    x2, c2 = x[pred == 2], centers[2]
-
-    # plot prediction
-    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
-    plt.scatter(c0[0], c0[1], color='r', s=100, marker='*')
-    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
-    plt.scatter(c1[0], c1[1], color='g', s=100, marker='*')
-    plt.scatter(x2[:, 0], x2[:, 1], color='b', marker='.')
-    plt.scatter(c2[0], c2[1], color='b', s=100, marker='*')
-    plt.title('Pred')
-    plt.show()
-
-
-if __name__ == '__main__':
-    test_kmeans()
