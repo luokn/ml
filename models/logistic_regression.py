@@ -11,7 +11,7 @@ class LogisticRegression:
     Logistic regression classifier(逻辑斯蒂回归)
     """
 
-    def __init__(self, input_dim, lr=0.01):
+    def __init__(self, input_dim, lr):
         """
         :param input_dim: 输入特征长度
         :param lr: 学习率

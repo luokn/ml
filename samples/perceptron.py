@@ -19,9 +19,8 @@ def test_perceptron():
     x = x.reshape(-1, 2)
     y = y.flatten()
 
-    perceptron = PerceptronClassifier(input_dim=2)
-
-    train_perceptron(perceptron, x, y, batch_size=32, epochs=100)
+    perceptron = PerceptronClassifier(input_dim=2, lr=1e-4)
+    train_perceptron(perceptron, x, y, epochs=100)
 
     pred = perceptron.predict(x)
     plot_scatter_with_line(x[pred == -1], x[pred == 1], perceptron.weights, 'Pred')
@@ -30,16 +29,12 @@ def test_perceptron():
     print(f'Acc = {100 * acc:.2f}%')
 
 
-def train_perceptron(model, x, y, batch_size, epochs):
+def train_perceptron(model, x, y, epochs):
     indices = np.arange(len(x))
     for epoch in range(epochs):
         np.random.shuffle(indices)
         shf_x, shf_y = x[indices], y[indices]
-        bat_s, bat_e = 0, batch_size
-        while bat_e <= len(x):
-            model.fit(shf_x[bat_s:bat_e], shf_y[bat_s:bat_e])
-            bat_s = bat_e
-            bat_e += batch_size
+        model.fit(shf_x, shf_y)
 
 
 def plot_scatter(xy0, xy1, title):

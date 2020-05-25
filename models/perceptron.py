@@ -3,21 +3,22 @@ import numpy as np
 
 class PerceptronClassifier:
     """
-    Perceptron classifier(感知机分类器, 原始形式)
+    Perceptron classifier(感知机分类器)
     """
 
-    def __init__(self, input_dim: int, lr=0.01):
+    def __init__(self, input_dim: int, lr):
+        """
+        :param input_dim: 输入特征长度
+        :param lr: 学习率
+        """
         self.input_dim, self.lr = input_dim, lr
         self.weights = np.random.randn(input_dim + 1)  # 权重
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        x_pad = pad(X)
-        err = Y * (x_pad @ self.weights) <= 0  # err表示是否分类错误
-        if not np.any(err):  # 没有任何错误
-            return  # 直接返回
-        x_err, y_err = x_pad[err], Y[err]  # 选择分类错误的X与Y
-        grad = np.mean(y_err.reshape(-1, 1) * x_err, axis=0)  # 计算weights梯度
-        self.weights -= self.lr * grad  # 更新weights梯度
+        for x, y in zip(pad(X), Y):
+            if y * (x @ self.weights) <= 0:  # 分类错误
+                neg_grad = x * y  # 计算weights的负梯度
+                self.weights += self.lr * neg_grad  # 沿负梯度方向更新weights
 
     def predict(self, X: np.ndarray):
         return sign(pad(X) @ self.weights)
@@ -28,6 +29,6 @@ def pad(x):
 
 
 def sign(x):
-    y = np.ones_like(x)
+    y = np.ones_like(x, dtype=int)
     y[x < 0] = -1
     return y
