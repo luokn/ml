@@ -23,7 +23,6 @@ def test_bayes_classifier():
     bayes.fit(X, Y)
     print(bayes.prior_prob)
     print(bayes.cond_prob)
-    # print(bayes.predict([1, 1]))
 
 
 if __name__ == "__main__":

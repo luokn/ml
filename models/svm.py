@@ -25,20 +25,29 @@ class SVM:
     def predict(self, X: np.ndarray):
         pass
 
+    @staticmethod
+    def linear_kernel(a: np.ndarray, b: np.ndarray):
+        """
+        线性核
+        """
+        pass
+
+    @staticmethod
+    def poly_kernel(a: np.ndarray, b: np.ndarray):
+        """
+        多项式核
+        """
+        pass
+
+    @staticmethod
+    def rbf_kernel(a: np.ndarray, b: np.ndarray):
+        """
+        高斯核
+        """
+        pass
+
     kernels = {
         'linear': linear_kernel,
         'poly': poly_kernel,
         'rbf': rbf_kernel
     }
-
-
-def linear_kernel(a: np.ndarray, b: np.ndarray):
-    pass
-
-
-def poly_kernel(a: np.ndarray, b: np.ndarray):
-    pass
-
-
-def rbf_kernel(a: np.ndarray, b: np.ndarray):
-    pass

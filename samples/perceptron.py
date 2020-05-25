@@ -1,35 +1,36 @@
 # -*- coding: utf-8 -*-
-# @Date  : 2020/5/24
+# @Date  : 2020/5/25
 # @Author: Luokun
 # @Email : olooook@outlook.com
-
 import numpy as np
 import matplotlib.pyplot as plt
 
-from models.logistic_regression import LogisticRegression
+from models.perceptron import PerceptronClassifier
 
 
-def test_logistic_regression():
-    x, y = np.random.randn(2, 500, 2), np.zeros([2, 500])
+def test_perceptron():
+    x, y = np.random.randn(2, 500, 2), np.zeros([2, 500], dtype=int)
     x[0] += np.array([1, -1])
     x[1] += np.array([-1, 1])
+    y[0] = -1
     y[1] = 1
     plot_scatter(x[0], x[1], 'Real')
 
     x = x.reshape(-1, 2)
     y = y.flatten()
 
-    logistic = LogisticRegression(2)
-    train_logistic_regression(logistic, x, y, batch_size=32, epochs=100)
+    perceptron = PerceptronClassifier(input_dim=2)
 
-    pred = logistic.predict(x)
-    plot_scatter_with_line(x[pred == 0], x[pred == 1], logistic.weights, 'Pred')
+    train_perceptron(perceptron, x, y, batch_size=32, epochs=100)
+
+    pred = perceptron.predict(x)
+    plot_scatter_with_line(x[pred == -1], x[pred == 1], perceptron.weights, 'Pred')
 
     acc = np.sum(pred == y) / len(pred)
     print(f'Acc = {100 * acc:.2f}%')
 
 
-def train_logistic_regression(model, x, y, batch_size, epochs):
+def train_perceptron(model, x, y, batch_size, epochs):
     indices = np.arange(len(x))
     for epoch in range(epochs):
         np.random.shuffle(indices)
@@ -69,4 +70,4 @@ def plot_scatter_with_line(xy0, xy1, weights, title):
 
 
 if __name__ == '__main__':
-    test_logistic_regression()
+    test_perceptron()

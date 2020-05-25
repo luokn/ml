@@ -10,34 +10,34 @@ from models.kmeans import KMeans
 
 
 def test_kmeans():
-    x = np.random.randn(3, 100, 2)
-    x[0] += np.array([2, 2])
-    x[1] += np.array([2, -2])
+    x = np.random.randn(3, 200, 2)
+    x[1] += np.array([2, 2])
+    x[2] += np.array([2, -2])
 
-    # plot real values
-    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
-    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
-    plt.scatter(x[2, :, 0], x[2, :, 1], color='b', marker='.')
-    plt.title("Real")
-    plt.show()
+    plot_scatter(x, 'Real')
+    x = x.reshape(-1, 2)
 
-    x = x.reshape(300, 2)
     kmeans = KMeans(3)
     pred = kmeans.predict(x)
     centers = kmeans.centers
 
-    x0, c0 = x[pred == 0], centers[0]
-    x1, c1 = x[pred == 1], centers[1]
-    x2, c2 = x[pred == 2], centers[2]
+    plot_scatter_with_centers([x[pred == i] for i in [0, 1, 2]], centers, 'Pred')
 
-    # plot prediction
-    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
-    plt.scatter(c0[0], c0[1], color='r', s=100, marker='*')
-    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
-    plt.scatter(c1[0], c1[1], color='g', s=100, marker='*')
-    plt.scatter(x2[:, 0], x2[:, 1], color='b', marker='.')
-    plt.scatter(c2[0], c2[1], color='b', s=100, marker='*')
-    plt.title('Pred')
+
+def plot_scatter(xys, title):
+    plt.figure(figsize=[8, 8])
+    for xy, color in zip(xys, ['r', 'g', 'b']):
+        plt.scatter(xy[:, 0], xy[:, 1], color=color, marker='.')
+    plt.title(title)
+    plt.show()
+
+
+def plot_scatter_with_centers(xys, centers, title):
+    plt.figure(figsize=[8, 8])
+    for xy, center, color in zip(xys, centers, ['r', 'g', 'b']):
+        plt.scatter(xy[:, 0], xy[:, 1], color=color, marker='.')
+        plt.scatter(center[0], center[1], color=color, s=100, marker='*')
+    plt.title(title)
     plt.show()
 
 
