@@ -28,15 +28,10 @@ class LogisticRegression:
     def predict(self, X):
         x_pad = pad(X)  # 为X填充1作为偏置
         pred = sigmoid(x_pad @ self.weights)  # 计算预测值
-        return binarize(pred)  # 将(0, 1)之间分布的概率转化为标签
+        return binarize(pred)  # 将(0, 1)之间分布的概率转化为{0, 1}标签
 
 
 def pad(x):
-    """
-    为X填充1
-    :param x:
-    :return:
-    """
     return np.concatenate([x, np.ones([len(x), 1])], axis=1)
 
 
@@ -49,12 +44,6 @@ def sigmoid(x):
 
 
 def binarize(x, threshold=.5):
-    """
-    对输入进行二值化
-    :param x:
-    :param threshold: 阈值
-    :return:
-    """
     b = np.zeros([len(x)], dtype=int)
     b[x > threshold] = 1
     return b

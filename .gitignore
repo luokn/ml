@@ -3,5 +3,6 @@
 .vscode
 
 notebooks
+visualize
 
 __pycache__/

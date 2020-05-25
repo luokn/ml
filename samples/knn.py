@@ -3,8 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from models.knn import KNN
 
@@ -17,11 +17,7 @@ def test_knn():
     y[2] = 2
 
     # plot the real values
-    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
-    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
-    plt.scatter(x[2, :, 0], x[2, :, 1], color='b', marker='.')
-    plt.title("Real")
-    plt.show()
+    scatter(x[0], x[1], x[2], 'Real')
 
     x = x.reshape(-1, 2)
     y = y.flatten()
@@ -31,18 +27,21 @@ def test_knn():
     knn.fit(x, y)
 
     pred = knn.predict(x)
-    x0, x1, x2 = x[pred == 0], x[pred == 1], x[pred == 2]
 
     # plot prediction
-    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
-    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
-    plt.scatter(x2[:, 0], x2[:, 1], color='b', marker='.')
-    plt.title('Pred')
-    plt.show()
+    scatter(x[pred == 0], x[pred == 1], x[pred == 2], 'Pred')
 
     # print accuracy
     acc = np.sum(pred == y) / len(pred)
     print(f'Acc = {100 * acc:.2f}%')
+
+
+def scatter(xy0, xy1, xy2, title):
+    plt.figure(figsize=(10, 10))
+    plt.scatter(xy0[:, 0], xy0[:, 1], color='r', marker='.')
+    plt.scatter(xy1[:, 0], xy1[:, 1], color='g', marker='.')
+    plt.scatter(xy2[:, 0], xy2[:, 1], color='b', marker='.')
+    plt.show()
 
 
 if __name__ == '__main__':
