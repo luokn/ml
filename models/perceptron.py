@@ -16,7 +16,7 @@ class PerceptronClassifier:
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         for x, y in zip(pad(X), Y):
-            if y * (x @ self.weights) <= 0:  # 分类错误
+            if y * (x @ self.weights) <= 0:  # 分类错误, y 与 wx + b 符号不同
                 neg_grad = x * y  # 计算weights的负梯度
                 self.weights += self.lr * neg_grad  # 沿负梯度方向更新weights
 
