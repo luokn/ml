@@ -23,18 +23,20 @@ class KMeans:
         self.centers = None  # 中心点
 
     def predict(self, X: np.ndarray):
-        Y = np.zeros([len(X)], dtype=int)  # X对应的预测值变量
+        Y = np.zeros([len(X)], dtype=int)  # 输出变量
         self.centers = X[random.sample(range(len(X)), self.k)]  # 随机选择k个点作为中心点
-        for _ in range(self.iterations):
+        for _ in range(self.iterations):  # 达到最大迭代次数iterations退出迭代
+            # 更新节点类别
             for i, x in enumerate(X):
-                # 更新每一个点所属的类别为离该点最近的中心点所在的索引
-                Y[i] = np.linalg.norm(self.centers - x, axis=1).argmin()
+                Y[i] = np.linalg.norm(self.centers - x, axis=1).argmin()  # 每一点类别为最近的中心点类别
+            # 计算均值
             means = np.empty_like(self.centers)  # 各类别点的均值
             for i in range(self.k):
                 if np.any(Y == i):  # 存在元素属于类别i
                     means[i] = np.mean(X[Y == i], axis=0)  # 计算类别i所有点的均值
                 else:  # 不存在任何元素属于类别i
-                    means[i] = X[np.random.randint(0, len(X))]  # 随计选择一个点作为类别i的均值
+                    means[i] = X[np.random.randint(0, len(X))]  # 随机选择一个点作为类别i的均值
+            # 更新中心点
             if np.max(np.abs(self.centers - means)) < self.eps:  # 中心点最大更新值小于eps
                 break  # 退出迭代
             self.centers = means  # 将更新后的均值作为各类别中心点
