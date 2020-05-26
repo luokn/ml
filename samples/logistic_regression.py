@@ -11,8 +11,8 @@ from models.logistic_regression import LogisticRegression
 
 def test_logistic_regression():
     x, y = np.random.randn(2, 500, 2), np.zeros([2, 500])
-    x[0] += np.array([1, -1])
-    x[1] += np.array([-1, 1])
+    x[0] += np.array([1, -1])  # 左上方移动
+    x[1] += np.array([-1, 1])  # 右下方移动
     y[1] = 1
     plot_scatter(x[0], x[1], 'Real')
 

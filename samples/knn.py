@@ -11,8 +11,8 @@ from models.knn import KNN
 
 def test_knn():
     x, y = np.random.randn(3, 200, 2), np.zeros([3, 200])
-    x[0] += np.array([2, 2])
-    x[1] += np.array([2, -2])
+    x[0] += np.array([2, 2])  # 右偏移2，上偏移2
+    x[1] += np.array([2, -2])  # 右偏移2，下偏移2
     y[1] = 1
     y[2] = 2
     plot_scatter(x, 'Real')

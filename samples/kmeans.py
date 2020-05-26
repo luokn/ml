@@ -11,8 +11,8 @@ from models.kmeans import KMeans
 
 def test_kmeans():
     x = np.random.randn(3, 200, 2)
-    x[1] += np.array([2, 2])
-    x[2] += np.array([2, -2])
+    x[1] += np.array([2, 2])  # 右偏移2，上偏移2
+    x[2] += np.array([2, -2])  # 右偏移2，下偏移2
 
     plot_scatter(x, 'Real')
     x = x.reshape(-1, 2)
