@@ -29,21 +29,21 @@ class DecisionTreeClassifier:
         return Y
 
     def _predict(self, node, x):
-        if isinstance(node, dict):
-            val = x[node['feature']]
-            return self._predict(node['trees'][val], x)
-        return node
+        if isinstance(node, dict):  # 如果节点是树(字典)类型
+            val = x[node['feature']]  # 获取划分特征的值
+            return self._predict(node['trees'][val], x)  # 根据值进行下一次递归
+        return node  # 如果节点是叶子类型则直接返回该值
 
     def _create_tree(self, indices, features):
-        best_class, prob = self._select_class(indices)
-        if len(features) == 0 or prob > self.rate:  # 无特征可分或者满足一定的单一性
+        best_class, rate = self._select_class(indices)  # 获得数量最多的类别及其频率
+        if len(features) == 0 or rate > self.rate:  # 无特征可分或者满足一定的单一性
             return best_class  # 返回最单一的类别
         best_feature = self._select_feature(indices, features)  # 选择香农熵最小的特征
         trees = {}
-        rest_features = features[features != best_feature]  # 除去此特征
-        for val in np.unique(self.x_train[indices, best_feature]):
+        rest_features = features[features != best_feature]  # 除去选择的特征
+        for val in np.unique(self.x_train[indices, best_feature]):  # 为该特征的每一个取值都建立子树
             sub_indices = self._query_indices(indices, best_feature, val)
-            trees[int(val)] = self._create_tree(sub_indices, rest_features)  # 递归构建决策树
+            trees[int(val)] = self._create_tree(sub_indices, rest_features)  # 递归构建子决策树
         return {'feature': best_feature, 'trees': trees}
 
     def _query_indices(self, indices, feature, value):
