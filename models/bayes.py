@@ -24,19 +24,13 @@ class NaiveBayesClassifier:
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         # 计算先验概率
-        y_counter = np.ones([self.y_classes])  # Y类别计数器
-        for y in Y:
-            y_counter[y] += 1
-        self.prior_prob = y_counter / y_counter.sum()  # 频率作为概率(贝叶斯估计)
+        self.prior_prob = self._estimate_prob(Y, self.y_classes)  # 频率作为概率(贝叶斯估计)
         # 计算条件概率
         for i in range(self.y_classes):
-            Xi = X[Y == i]  # 类别i的所有数据
-            for f, classes in enumerate(self.x_classes):  # 第f个特征有classes个类别
-                x_counter = np.ones([classes])  # f特征的类别计数器
-                for x in Xi[:, f]:  # 统计类别为i时，f特征取值概率
-                    x_counter[x] += 1
+            x_i = X[Y == i]  # 类别i的所有数据
+            for f, f_classes in enumerate(self.x_classes):  # 第f个特征有f_classes个类别
                 # 类别为i时，f特征所有取值的条件概率(贝叶斯估计)
-                self.cond_prob[i][f] = x_counter / x_counter.sum()
+                self.cond_prob[i][f] = self._estimate_prob(x_i[:, f], f_classes)
 
     def predict(self, X: np.ndarray):
         Y = np.zeros([len(X)], dtype=int)
@@ -47,3 +41,8 @@ class NaiveBayesClassifier:
                 prob[c] += np.log(self.cond_prob[c][:, x]).sum()  # 连乘条件概率
             Y[i] = prob.argmax()
         return Y
+
+    @staticmethod
+    def _estimate_prob(x, n_classes):
+        counter = np.bincount(x, minlength=n_classes) + 1
+        return counter / counter.sum()
