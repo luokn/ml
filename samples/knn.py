@@ -3,13 +3,18 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
+import sys
+from os.path import dirname, abspath
+
 import matplotlib.pyplot as plt
 import numpy as np
 
-from models.knn import KNN
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_knn():
+    from models.knn import KNN
+
     x, y = np.random.randn(3, 200, 2), np.zeros([3, 200])
     x[0] += np.array([2, 2])  # 右偏移2，上偏移2
     x[1] += np.array([2, -2])  # 右偏移2，下偏移2

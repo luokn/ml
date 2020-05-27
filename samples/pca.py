@@ -3,13 +3,18 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
+import sys
+from os.path import dirname, abspath
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-from models.pca import PCA
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_pca():
+    from models.pca import PCA
+
     x = np.random.randn(3, 200, 2)
     x[1] += np.array([-2, 0])
     x[2] += np.array([2, 0])

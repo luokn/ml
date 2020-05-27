@@ -2,13 +2,19 @@
 # @Date  : 2020/5/25
 # @Author: Luokun
 # @Email : olooook@outlook.com
+
+import sys
+from os.path import dirname, abspath
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-from models.perceptron import PerceptronClassifier
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_perceptron():
+    from models.perceptron import Perceptron
+
     x, y = np.random.randn(2, 500, 2), np.zeros([2, 500], dtype=int)
     x[0] += np.array([1, -1])
     x[1] += np.array([-1, 1])
@@ -19,7 +25,7 @@ def test_perceptron():
     x = x.reshape(-1, 2)
     y = y.flatten()
 
-    perceptron = PerceptronClassifier(input_dim=2, lr=1e-4)
+    perceptron = Perceptron(input_dim=2, lr=1e-4)
     train_perceptron(perceptron, x, y, epochs=100)
 
     pred = perceptron.predict(x)

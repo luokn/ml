@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class PerceptronClassifier:
+class Perceptron:
     """
     Perceptron classifier(感知机分类器)
     """

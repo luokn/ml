@@ -3,12 +3,17 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
+import sys
+from os.path import dirname, abspath
+
 import numpy as np
 
-from models.decision_tree import DecisionTree
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_decision_tree():
+    from models.decision_tree import DecisionTree
+
     X = np.array([
         [0, 0, 0],
         [0, 0, 0],

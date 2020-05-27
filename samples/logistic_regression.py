@@ -3,13 +3,18 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
+import sys
+from os.path import dirname, abspath
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-from models.logistic_regression import LogisticRegression
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_logistic_regression():
+    from models.logistic_regression import LogisticRegression
+
     x, y = np.random.randn(2, 500, 2), np.zeros([2, 500])
     x[0] += np.array([1, -1])  # 左上方移动
     x[1] += np.array([-1, 1])  # 右下方移动
@@ -19,7 +24,7 @@ def test_logistic_regression():
     x = x.reshape(-1, 2)
     y = y.flatten()
 
-    logistic = LogisticRegression(2)
+    logistic = LogisticRegression(2, lr=1e-3)
     train_logistic_regression(logistic, x, y, batch_size=32, epochs=100)
 
     pred = logistic.predict(x)

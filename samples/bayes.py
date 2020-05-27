@@ -3,11 +3,17 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
+import sys
+from os.path import dirname, abspath
+
 import numpy as np
-from models.bayes import NaiveBayesClassifier
+
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_bayes_classifier():
+    from models.bayes import NaiveBayesClassifier
+
     # 参照李航《统计学习方法（第一版）》第四章例4.1
     X = np.array([
         [0, 0], [0, 1], [0, 1], [0, 0], [0, 0],
