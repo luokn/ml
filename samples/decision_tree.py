@@ -5,9 +5,7 @@
 
 import numpy as np
 
-import json
-
-from models.decision_tree import DecisionTreeClassifier
+from models.decision_tree import DecisionTree
 
 
 def test_decision_tree():
@@ -32,7 +30,7 @@ def test_decision_tree():
     ])
     Y = np.array([1 if np.sum(x) >= 2 else 0 for x in X])
 
-    dec_tree = DecisionTreeClassifier(rate=0.95)
+    dec_tree = DecisionTree(rate=0.95)
     dec_tree.fit(X, Y)
     print(dec_tree.tree)
 

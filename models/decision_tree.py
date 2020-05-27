@@ -6,7 +6,7 @@
 import numpy as np
 
 
-class DecisionTreeClassifier:
+class DecisionTree:
     """
     Decision tree classifier(决策树分类器，ID3生成算法)
     """
