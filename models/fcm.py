@@ -11,13 +11,13 @@ class FCM:
     Fuzzy C-means clustering(模糊C均值聚类)
     """
 
-    def __init__(self, c: int, m: int, eps=0.01, iterations=100):
-        self.c, self.m, self.eps, self.iterations = c, m, eps, iterations
+    def __init__(self, c: int, m: int, eps=0.01, max_iter=100):
+        self.c, self.m, self.eps, self.max_iter = c, m, eps, max_iter
         self.U = None
 
     def predict(self, X: np.ndarray):
         self.U = self._normalize(np.random.uniform(size=[len(X), self.c]))
-        for _ in range(self.iterations):
+        for _ in range(self.max_iter):
             C = self._normalize(self.U).T @ X
             U = np.empty_like(self.U)
             for i, x in enumerate(X):
