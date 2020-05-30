@@ -24,7 +24,7 @@ class LogisticRegression:
     def predict(self, X: np.ndarray):
         x_pad = pad(X)  # 为X填充1作为偏置
         pred = sigmoid(x_pad @ self.weights)  # 计算预测值
-        return binarize(pred)  # 将(0, 1)之间分布的概率转化为{0, 1}标签
+        return np.where(pred > 0.5, 1, 0)  # 将(0, 1)之间分布的概率转化为{0, 1}标签
 
 
 def pad(x):
@@ -33,9 +33,3 @@ def pad(x):
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
-
-
-def binarize(x, threshold=.5):
-    y = np.zeros_like(x, dtype=int)
-    y[x > threshold] = 1
-    return y
