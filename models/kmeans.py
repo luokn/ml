@@ -13,19 +13,19 @@ class KMeans:
     K-means clustering(K均值聚类)
     """
 
-    def __init__(self, k: int, eps: float = 1e-3, iterations=100):
+    def __init__(self, k: int, eps: float = 1e-3, max_iter=100):
         """
         :param k: 聚类类别数
         :param eps: 中心点最小更新量
-        :param iterations: 迭代最大次数
+        :param max_iter: 迭代最大次数
         """
-        self.k, self.eps, self.iterations = k, eps, iterations
+        self.k, self.eps, self.max_iter = k, eps, max_iter
         self.centers = None  # 中心点
 
     def predict(self, X: np.ndarray):
         Y = np.zeros([len(X)], dtype=int)  # 输出变量
         self.centers = X[random.sample(range(len(X)), self.k)]  # 随机选择k个点作为中心点
-        for _ in range(self.iterations):  # 达到最大迭代次数iterations退出迭代
+        for _ in range(self.max_iter):  # 达到最大迭代次数iterations退出迭代
             # 更新节点类别
             for i, x in enumerate(X):
                 Y[i] = np.linalg.norm(self.centers - x, axis=1).argmin()  # 每一点类别为最近的中心点类别

@@ -38,14 +38,14 @@ class SVM:
             self.K = PolyKernel()  # 多项式核函数
         if kernel == 'rbf':
             self.K = RBFKernel(kwargs['sigma'])  # 径向基核函数
-        self.iterations = max_iter  # 最大迭代次数
+        self.max_iter = max_iter  # 最大迭代次数
         self.alpha, self.b = None, .0
         self.X, self.Y = None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         self.X, self.Y = X, Y
         self.alpha = np.ones([len(X)], dtype=np.float)  # 拉格朗日乘子
-        for _ in range(self.iterations):
+        for _ in range(self.max_iter):
             E = np.array([self._e(i) for i in range(len(X))])  # 此次迭代缓存的误差
             for i1 in range(len(X)):
                 E1 = self._e(i1)
