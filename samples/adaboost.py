@@ -26,7 +26,7 @@ def test_adaboost():
     y = y.flatten()
 
     # train
-    ab = AdaBoost(100)
+    ab = AdaBoost(5)
     ab.fit(x, y)
 
     pred = ab.predict(x)
