@@ -3,9 +3,6 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-from collections import Counter
-
-import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -28,6 +25,6 @@ class KNN:
         for i, x in enumerate(X):
             dist = np.linalg.norm(self.x_train - x, axis=1)  # 计算x与所有已知类别点的距离
             topk = np.argsort(dist)[:self.k]  # 取距离最近的k个点对应的索引
-            counter = Counter(self.y_train[topk])  # 统计k近邻点的类别数量
-            Y[i] = counter.most_common(1)[0][0]  # k近邻次数最多的类别将作为x的类别
+            counter = np.bincount(self.y_train[topk])  # 统计k近邻点的类别数量
+            Y[i] = np.argmax(counter)  # k近邻次数最多的类别将作为x的类别
         return Y
