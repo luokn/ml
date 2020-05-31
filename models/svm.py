@@ -93,7 +93,7 @@ class SVM:
 
     def predict(self, X: np.ndarray):
         Y = np.array([self._g(x) for x in X])
-        return np.where(Y > 0, 1, -1)
+        return np.where(Y > 0, 1, -1)  # 将(-\infinity, \infinity)之间的分布转为{-1, +1}标签
 
     @property
     def support_vectors(self):  # 支持向量
@@ -107,8 +107,8 @@ class SVM:
             return gi * yi <= 1
         return np.abs(gi * yi - 1) < self.tol
 
-    def _g(self, x):
+    def _g(self, x):  # g(x) =\sum_{i=0}^N alpha_i y_i \kappa(x_i, x)
         return np.sum(self.alpha * self.Y * self.K(self.X, x)) + self.b
 
-    def _e(self, i):
+    def _e(self, i):  # E_i = g(x_i) - y_i
         return self._g(self.X[i]) - self.Y[i]
