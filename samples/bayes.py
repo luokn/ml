@@ -11,7 +11,7 @@ import numpy as np
 sys.path.append(dirname(dirname(abspath(__file__))))
 
 
-def test_bayes_classifier():
+def test_naive_bayes():
     from models.bayes import NaiveBayesClassifier
 
     # 参照李航《统计学习方法（第一版）》第四章例4.1
@@ -33,4 +33,4 @@ def test_bayes_classifier():
 
 
 if __name__ == "__main__":
-    test_bayes_classifier()
+    test_naive_bayes()
