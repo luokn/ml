@@ -56,12 +56,9 @@ class SVM:
                 if i1 == i2:
                     continue
                 E2 = self._e(i2)
-
-                x1, x2 = X[i1], X[i2]
-                y1, y2 = Y[i1], Y[i2]
+                x1, x2, y1, y2 = X[i1], X[i2], Y[i1], Y[i2]
                 alpha1, alpha2 = self.alpha[i1], self.alpha[i2]
                 k11, k22, k12 = self.K(x1, x1), self.K(x2, x2), self.K(x1, x2)
-
                 # 计算剪切范围
                 if y1 * y2 < 0:
                     L = max(0, alpha2 - alpha1)
@@ -71,11 +68,9 @@ class SVM:
                     H = min(self.C, alpha1 + alpha2)
                 if L == H:
                     continue
-
                 eta = k11 + k22 - 2 * k12
                 if eta <= 0:
                     continue
-
                 # 计算新参数
                 alpha2_new = np.clip(alpha2 + y2 * (E1 - E2) / eta, L, H)
                 alpha1_new = alpha1 + y1 * y2 * (alpha2 - alpha2_new)
@@ -83,18 +78,15 @@ class SVM:
                 alpha1_delta = alpha1_new - alpha1
                 b1_new = -E1 - y1 * k11 * alpha1_delta - y2 * k12 * alpha2_delta + self.b
                 b2_new = -E2 - y1 * k12 * alpha1_delta - y2 * k22 * alpha2_delta + self.b
-
                 # 更新参数
                 self.alpha[i1] = alpha1_new
                 self.alpha[i2] = alpha2_new
-
                 if 0 < alpha1_new < self.C:
                     self.b = b1_new
                 elif 0 < alpha2_new < self.C:
                     self.b = b2_new
                 else:
                     self.b = (b1_new + b2_new) / 2
-
                 # 更新误差缓存
                 E[i1] = self._e(i1)
                 E[i2] = self._e(i2)
