@@ -52,9 +52,6 @@ class AdaBoost:
         self.weights = self.weights * rhs / (self.weights @ rhs)
 
     class _WeakEstimator:  # 弱分类器, 一阶决策树
-        POS_SIGN = 1.0
-        NEG_SIGN = -1.0
-
         def __init__(self, feature: int):
             self.feature = feature  # 划分特征
             self.split_value, self.sign = None, None  # 划分值、符号
@@ -63,17 +60,17 @@ class AdaBoost:
             pos_corr, neg_corr = np.sum(Y == 1), np.sum(Y == -1)
             x = X[:, self.feature]
             if pos_corr >= neg_corr:
-                self.split_value, self.sign, max_corr = np.min(x) - .5, self.POS_SIGN, pos_corr
+                self.split_value, self.sign, max_corr = np.min(x) - .5, 1.0, pos_corr
             else:
-                self.split_value, self.sign, max_corr = np.max(x) + .5, self.NEG_SIGN, neg_corr
+                self.split_value, self.sign, max_corr = np.max(x) + .5, -1.0, neg_corr
             indices = np.argsort(x)
             for i in range(len(x) - 1):
                 pos_corr -= Y[indices[i]]
                 neg_corr += Y[indices[i]]
                 if pos_corr > max_corr:
-                    self.sign, max_corr = self.POS_SIGN, pos_corr
+                    self.sign, max_corr = 1.0, pos_corr
                 elif neg_corr > max_corr:
-                    self.sign, max_corr = self.NEG_SIGN, neg_corr
+                    self.sign, max_corr = -1.0, neg_corr
                 else:
                     continue
                 self.split_value = (x[indices[i]] + x[indices[i + 1]]) / 2
