@@ -34,7 +34,7 @@
 
 - :white_check_mark:代码：[models/svm.py](./models/svm.py)
 
-- :white_check_mark:用例：[samples/kmeans.py](./samples/kmeans.py)
+- :white_check_mark:用例：[samples/svm.py](./samples/svm.py)
 
 #### K-Means
 
