@@ -21,8 +21,9 @@ class FCM:
             C = self._normalize(self.U).T @ X
             U = np.empty_like(self.U)
             for i, x in enumerate(X):
-                D = np.linalg.norm(C - x, axis=1) ** (2 / (self.m - 1))
-                U[i] = 1.0 / np.sum(D.reshape(-1, 1) @ (1 / D.reshape(1, -1)), axis=1)
+                M = np.linalg.norm(C - x, axis=1) ** (2 / (self.m - 1))
+                L, R = M.reshape(-1, 1), 1 / M.reshape(1, -1)
+                U[i] = 1.0 / np.sum(L @ R, axis=1)
             if np.abs(U - self.U) < self.eps:
                 break
             self.U = U
