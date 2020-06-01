@@ -62,6 +62,10 @@
 
 #### AdaBoost
 
+- :white_check_mark:代码：[models/adaboost.py](./models/adaboost.py)
+
+- :white_check_mark:用例：[samples/adaboost.py](./samples/adaboost.py)
+
 #### CART
 
 #### GBDT
