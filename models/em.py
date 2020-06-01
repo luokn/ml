@@ -32,4 +32,4 @@ class SimpleEM:
         self.prob[1] = np.sum(mu * self.Y) / np.sum(mu)
         self.prob[2] = np.sum((1 - mu) * self.Y) / np.sum(1 - mu)
 
-# 更复杂的EM算法实例高斯混合模型可参见./gmm.py
+# EM算法与高斯混合模型可参见./gmm.py
