@@ -2,7 +2,7 @@
 
 #### 感知机
 
-- :white_check_mark: 代码：[models/perceptron.py](./models/perceptron.py)
+- :white_check_mark:代码：[models/perceptron.py](./models/perceptron.py)
 
 - :white_check_mark:用例：[samples/perceptron.py](./samples/perceptron.py)
 
