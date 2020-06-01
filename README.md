@@ -50,6 +50,10 @@
 
 #### EM算法
 
+- :white_check_mark:代码：[models/em.py](./models/em.py)
+
+- :white_check_mark:用例：[samples/em.py](./samples/em.py)
+
 #### K-Means
 
 - :white_check_mark:代码：[models/kmeans.py](./models/kmeans.py)
