@@ -34,6 +34,10 @@
 
 #### 主成因分析
 
+- :white_check_mark:代码：[models/pca.py](./models/pca.py)
+
+- :white_check_mark:用例：[samples/pca.py](./samples/pca.py)
+
 #### 线性判别分析
 
 #### 隐马尔科夫模型
