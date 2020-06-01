@@ -1,4 +1,4 @@
-##  机器学习算法极简实现
+##  经典机器学习算法的极简实现
 
 #### 感知机
 
@@ -11,12 +11,6 @@
 - :white_check_mark:代码：[models/logistic_regression.py](./models/logistic_regression.py)
 
 - :white_check_mark:用例：[samples/logistic_regression.py](./samples/logistic_regression.py)
-
-#### K近邻
-
-- :white_check_mark:代码：[models/knn.py](./models/knn.py)
-
-- :white_check_mark:用例：[samples/knn.py](./samples/knn.py)
 
 #### 朴素贝叶斯
 
@@ -36,37 +30,45 @@
 
 - :white_check_mark:用例：[samples/svm.py](./samples/svm.py)
 
+#### 极限学习机
+
+#### 主成因分析
+
+#### 线性判别分析
+
+#### 隐马尔科夫模型
+
+#### 条件随机场
+
+#### 高斯过程回归
+
+#### K近邻
+
+- :white_check_mark:代码：[models/knn.py](./models/knn.py)
+
+- :white_check_mark:用例：[samples/knn.py](./samples/knn.py)
+
+#### EM算法
+
 #### K-Means
 
 - :white_check_mark:代码：[models/kmeans.py](./models/kmeans.py)
 
 - :white_check_mark:用例：[samples/kmeans.py](./samples/kmeans.py)
 
-####  AdaBoost
-
-- :white_check_mark:代码：[models/svm.py](./models/svm.py)
-
-- :white_check_mark:用例：[samples/kmeans.py](./samples/kmeans.py)
-
+#### AdaBoost
 
 #### CART
 
 #### GBDT
-
-####  岭回归
-
-#### 隐马尔科夫模型
-
-#### 高斯过程回归
-
-#### EM
-
-#### PCA
 
 #### FCM
 
 - :white_check_mark:代码：[models/fcm.py](./models/fcm.py)
 
 - :white_check_mark:用例：[samples/fcm.py](./samples/fcm.py)
+
+
+
 
 
