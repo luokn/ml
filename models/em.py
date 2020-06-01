@@ -22,10 +22,10 @@ class SimpleEM:
             self._maximize(mu)
 
     def _expect(self):  # E步
-        PA, PB, PC = self.prob
-        P1 = PA * (PB ** self.Y) * ((1 - PB) ** (1 - self.Y))
-        P2 = (1 - PA) * (PC ** self.Y) * ((1 - PC) ** (1 - self.Y))
-        return P1 / (P1 + P2)
+        p1, p2, p3 = self.prob
+        a = p1 * (p2 ** self.Y) * ((1 - p2) ** (1 - self.Y))
+        b = (1 - p1) * (p3 ** self.Y) * ((1 - p3) ** (1 - self.Y))
+        return a / (a + b)
 
     def _maximize(self, mu):  # M步
         self.prob[0] = np.sum(mu) / len(self.Y)
