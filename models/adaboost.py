@@ -29,7 +29,7 @@ class AdaBoost:
         for k in range(self.n_estimators):
             errors = np.array([
                 np.sum(np.where(pred == Y, 0, self.weights)) for pred in predictions
-            ])  # 计算每一个弱分类器误差
+            ])  # 计算每一个弱分类器的带权重误差
             idx = int(np.argmin(errors))  # 选择最小误差
             if errors[idx] < self.eps:  # 误差达到阈值，停止
                 break
@@ -48,8 +48,8 @@ class AdaBoost:
         self.alpha[k] = .5 * np.log((1 - e) / e)
 
     def _update_weights(self, k: int, pred: np.ndarray):  # 更新样本权重
-        rhs = np.exp(-self.alpha[k] * self.Y * pred)
-        self.weights = self.weights * rhs / (self.weights @ rhs)
+        exp_res = np.exp(-self.alpha[k] * self.Y * pred)
+        self.weights = self.weights * exp_res / (self.weights @ exp_res)
 
     class _WeakEstimator:  # 弱分类器, 一阶决策树
         def __init__(self, feature: int):
