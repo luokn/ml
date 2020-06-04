@@ -20,6 +20,7 @@ class SimpleEM:
         for _ in range(self.max_iter):
             self._expect()
             self._maximize()
+        self._mu = None
 
     def _expect(self):  # E步
         p1, p2, p3 = self.prob
