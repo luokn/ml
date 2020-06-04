@@ -25,7 +25,7 @@ class SimpleEM:
         p1, p2, p3 = self.prob
         a = p1 * (p2 ** self.X) * ((1 - p2) ** (1 - self.X))
         b = (1 - p1) * (p3 ** self.X) * ((1 - p3) ** (1 - self.X))
-        return a / (a + b)
+        self._mu = a / (a + b)
 
     def _maximize(self):  # M步
         self.prob[0] = np.sum(self._mu) / len(self.X)
