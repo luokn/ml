@@ -51,12 +51,12 @@ class SVM:
         self.alpha = np.ones([len(X)], dtype=np.float)  # 拉格朗日乘子
         for _ in range(self.max_iter):
             E = np.array([self._calc_error(i) for i in range(len(X))])  # 此次迭代缓存的误差
-            for i1 in range(len(X)):
-                E1 = self._calc_error(i1)
+            for i1 in range(len(X)):  # 外层循环，寻找第一个alpha
+                E1 = self._calc_error(i1)  # 计算误差(不使用E缓存)
                 if E1 == 0 or self._satisfy_kkt(i1):  # 误差为0或满足KKT条件
                     continue
                 # 大于0则选择最小,小于0选择最大的
-                i2 = np.argmin(E) if E1 > 0 else np.argmax(E)
+                i2 = np.argmin(E) if E1 > 0 else np.argmax(E)  # 内层循环，寻找第二个alpha
                 if i1 == i2:
                     continue
                 E2 = self._calc_error(i2)
@@ -75,11 +75,11 @@ class SVM:
                 eta = k11 + k22 - 2 * k12
                 if eta <= 0:
                     continue
-                # 计算新参数
+                # 计算新alpha
                 alpha2_new = np.clip(alpha2 + y2 * (E1 - E2) / eta, L, H)
                 alpha1_new = alpha1 + y1 * y2 * (alpha2 - alpha2_new)
-                alpha2_delta = alpha2_new - alpha2
-                alpha1_delta = alpha1_new - alpha1
+                # 计算新b
+                alpha2_delta, alpha1_delta = alpha2_new - alpha2, alpha1_new - alpha1
                 b1_new = -E1 - y1 * k11 * alpha1_delta - y2 * k12 * alpha2_delta + self.b
                 b2_new = -E2 - y1 * k12 * alpha1_delta - y2 * k22 * alpha2_delta + self.b
                 # 更新参数
