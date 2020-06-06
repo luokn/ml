@@ -14,9 +14,9 @@
 
 #### 朴素贝叶斯
 
-- :white_check_mark:代码：[models/bayes.py](./models/bayes.py)
+- :white_check_mark:代码：[models/naive_bayes.py](models/naive_bayes.py)
 
-- :white_check_mark:用例：[samples/bayes.py](./samples/bayes.py)
+- :white_check_mark:用例：[samples/naive_bayes.py](samples/naive_bayes.py)
 
 #### 决策树
 
@@ -46,17 +46,25 @@
 
 #### 高斯过程回归
 
-#### K近邻
+#### 高斯混合模型
 
-- :white_check_mark:代码：[models/knn.py](./models/knn.py)
+- :white_check_mark:代码：[models/gmm.py](./models/gmm.py)
 
-- :white_check_mark:用例：[samples/knn.py](./samples/knn.py)
+- :white_check_mark:用例：[samples/gmm.py](./samples/gmm.py)
+
+#### 随机森林
 
 #### EM算法
 
 - :white_check_mark:代码：[models/em.py](./models/em.py)
 
 - :white_check_mark:用例：[samples/em.py](./samples/em.py)
+
+#### K近邻
+
+- :white_check_mark:代码：[models/knn.py](./models/knn.py)
+
+- :white_check_mark:用例：[samples/knn.py](./samples/knn.py)
 
 #### K-Means
 
