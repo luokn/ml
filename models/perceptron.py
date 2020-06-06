@@ -21,9 +21,9 @@ class Perceptron:
                 self.weights += self.lr * neg_grad  # 沿负梯度方向更新weights
 
     def predict(self, X: np.ndarray):
-        pred = pad(X) @ self.weights
+        pred = self._pad(X) @ self.weights
         return np.where(pred > 0, 1, -1)
 
-
-def pad(x):
-    return np.concatenate([x, np.ones([len(x), 1])], axis=1)
+    @staticmethod
+    def _pad(x):
+        return np.concatenate([x, np.ones([len(x), 1])], axis=1)
