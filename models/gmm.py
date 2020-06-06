@@ -9,18 +9,25 @@ from scipy.stats import multivariate_normal
 
 
 class GMM:
-    def __init__(self, n_components, max_iter: int = 100, cov_reg: float = 1e-06):
+    def __init__(self, n_components, max_iter=100, cov_reg=1e-06):
+        """
+        :param n_components: 聚类类别数
+        :param max_iter: 最大迭代次数
+        :param cov_reg: 用于防止协方差矩阵奇异的微小变量
+        """
         self.n_components, self.max_iter, self.cov_reg = n_components, max_iter, cov_reg
         self.weights = np.full(self.n_components, 1 / self.n_components)
         self.means, self.covs = None, None
 
     def fit(self, X: np.ndarray):
+        # 随机选择n_components个点作为高斯分布中心
         self.means = np.array(X[random.sample(range(X.shape[0]), self.n_components)])
+        # 初始高斯分布协方差均为单位矩阵
         self.covs = np.stack([np.eye(X.shape[1]) for _ in range(self.n_components)])
 
         for i in range(self.max_iter):
-            G = self._expect(X)
-            self._maximize(X, G)
+            G = self._expect(X)  # E步
+            self._maximize(X, G)  # M步
 
     def predict(self, X: np.ndarray):
         G = self._expect(X)
