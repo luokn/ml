@@ -12,7 +12,7 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_naive_bayes():
-    from models.bayes import NaiveBayesClassifier
+    from models.naive_bayes import NaiveBayesClassifier
 
     # 参照李航《统计学习方法（第一版）》第四章例4.1
     X = np.array([

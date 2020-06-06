@@ -43,6 +43,6 @@ class NaiveBayesClassifier:
         return Y
 
     @staticmethod
-    def _estimate_prob(x, n_classes):
+    def _estimate_prob(x, n_classes):  # 使用贝叶斯估计
         counter = np.bincount(x, minlength=n_classes) + 1
         return counter / counter.sum()
