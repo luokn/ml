@@ -29,16 +29,20 @@ class SVM:
     Support Vector Machines(支持向量机)
     """
 
-    def __init__(self, C=1.0, tol=1e-3, kernel='linear', max_iter=100, **kwargs):
-        self.C = C  # 惩罚因子
-        self.tol = tol  # 绝对误差限
+    def __init__(self, C=1.0, tol=1e-3, max_iter=100, kernel='linear', **kwargs):
+        """
+        :param C: 惩罚因子
+        :param tol: 绝对误差限
+        :param max_iter: 最大迭代次数
+        :param kernel: 核函数
+        """
+        self.C, self.tol, self.max_iter = C, tol, max_iter
         if kernel == 'linear':
             self.K = LinearKernel()  # 线性核函数
         if kernel == 'poly':
             self.K = PolyKernel()  # 多项式核函数
         if kernel == 'rbf':
             self.K = RBFKernel(kwargs['sigma'])  # 径向基核函数
-        self.max_iter = max_iter  # 最大迭代次数
         self.alpha, self.b = None, .0
         self.X, self.Y = None, None
 
@@ -46,16 +50,16 @@ class SVM:
         self.X, self.Y = X, Y
         self.alpha = np.ones([len(X)], dtype=np.float)  # 拉格朗日乘子
         for _ in range(self.max_iter):
-            E = np.array([self._e(i) for i in range(len(X))])  # 此次迭代缓存的误差
+            E = np.array([self._calc_error(i) for i in range(len(X))])  # 此次迭代缓存的误差
             for i1 in range(len(X)):
-                E1 = self._e(i1)
-                if self._kkt(i1) or E1 == 0:  # 满足KKT条件或者误差为0
+                E1 = self._calc_error(i1)
+                if E1 == 0 or self._satisfy_kkt(i1):  # 误差为0或满足KKT条件
                     continue
                 # 大于0则选择最小,小于0选择最大的
                 i2 = np.argmin(E) if E1 > 0 else np.argmax(E)
                 if i1 == i2:
                     continue
-                E2 = self._e(i2)
+                E2 = self._calc_error(i2)
                 x1, x2, y1, y2 = X[i1], X[i2], Y[i1], Y[i2]
                 alpha1, alpha2 = self.alpha[i1], self.alpha[i2]
                 k11, k22, k12 = self.K(x1, x1), self.K(x2, x2), self.K(x1, x2)
@@ -88,8 +92,8 @@ class SVM:
                 else:
                     self.b = (b1_new + b2_new) / 2
                 # 更新误差缓存
-                E[i1] = self._e(i1)
-                E[i2] = self._e(i2)
+                E[i1] = self._calc_error(i1)
+                E[i2] = self._calc_error(i2)
 
     def predict(self, X: np.ndarray):
         Y = np.array([self._g(x) for x in X])
@@ -99,16 +103,16 @@ class SVM:
     def support_vectors(self):  # 支持向量
         return self.X[self.alpha > 0]
 
-    def _kkt(self, i):  # 是否满足KKT条件
+    def _g(self, x):  # g(x) =\sum_{i=0}^N alpha_i y_i \kappa(x_i, x)
+        return np.sum(self.alpha * self.Y * self.K(self.X, x)) + self.b
+
+    def _calc_error(self, i):  # E_i = g(x_i) - y_i
+        return self._g(self.X[i]) - self.Y[i]
+
+    def _satisfy_kkt(self, i):  # 是否满足KKT条件
         gi, yi = self._g(self.X[i]), self.Y[i]
         if np.abs(self.alpha[i]) < self.tol:
             return gi * yi >= 1
         if np.abs(self.alpha[i]) > self.C - self.tol:
             return gi * yi <= 1
         return np.abs(gi * yi - 1) < self.tol
-
-    def _g(self, x):  # g(x) =\sum_{i=0}^N alpha_i y_i \kappa(x_i, x)
-        return np.sum(self.alpha * self.Y * self.K(self.X, x)) + self.b
-
-    def _e(self, i):  # E_i = g(x_i) - y_i
-        return self._g(self.X[i]) - self.Y[i]
