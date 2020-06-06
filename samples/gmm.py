@@ -19,8 +19,8 @@ def test_gmm():
         np.random.multivariate_normal(mean=[0, 5], cov=[[2, 0], [0, 1]], size=[1000])
     ])
     plot_scatter(x, 'Real')
-
     x = x.reshape(-1, 2)
+
     gmm = GMM(2, max_iter=1000)
     gmm.fit(x)
 
