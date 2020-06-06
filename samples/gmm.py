@@ -14,19 +14,10 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 
 def test_gmm():
     from models.gmm import GMM
-
-    x = np.empty([2, 1000, 2])
-
-    mean = np.array([5, 0])
-    std = np.array([2, 2])
-    cov = np.diag(std ** 2)
-    x[0] = np.random.multivariate_normal(mean=mean, cov=cov, size=[1000])
-
-    mean = np.array([0, 5])
-    std = np.array([2, 1])
-    cov = np.diag(std ** 2)
-    x[1] = np.random.multivariate_normal(mean=mean, cov=cov, size=[1000])
-
+    x = np.stack([
+        np.random.multivariate_normal(mean=[5, 0], cov=[[2, 0], [0, 2]], size=[1000]),
+        np.random.multivariate_normal(mean=[0, 5], cov=[[2, 0], [0, 1]], size=[1000])
+    ])
     plot_scatter(x, 'Real')
 
     x = x.reshape(-1, 2)
