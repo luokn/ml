@@ -13,7 +13,7 @@ class KMeans:
     K-means clustering(K均值聚类)
     """
 
-    def __init__(self, k: int, eps: float = 1e-3, max_iter=100):
+    def __init__(self, k: int, eps=1e-3, max_iter=100):
         """
         :param k: 聚类类别数
         :param eps: 中心点最小更新量
