@@ -12,15 +12,17 @@ class AdaBoost:
     """
 
     def __init__(self, n_estimators: int, eps=1e-5):
+        """
+        :param n_estimators: 弱分类器个数
+        :param eps: 误差阈值
+        """
         self.n_estimators, self.eps = n_estimators, eps
         self.estimators = []
-        self.alpha = np.empty([n_estimators])
-        self.weights = None
-        self.X, self.Y = None, None
+        self.alpha = np.empty([n_estimators])  # 弱分类器权重
+        self._X, self._Y, self._weights = None, None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        self.X, self.Y = X, Y
-        self.weights = np.full([len(X)], 1 / len(X))
+        self._X, self._Y, self._weights = X, Y, np.full([len(X)], 1 / len(X))
         estimators = [self._WeakEstimator(f) for f in range(X.shape[1])]  # 所有特征的弱分类器
         predictions = np.zeros([len(estimators), len(Y)])  # 弱分类器输出
         for i, estimator in enumerate(estimators):
@@ -28,7 +30,7 @@ class AdaBoost:
             predictions[i] = estimator(X)  # 记录所有弱分类器输出
         for k in range(self.n_estimators):
             errors = np.array([
-                np.sum(np.where(pred == Y, 0, self.weights)) for pred in predictions
+                np.sum(np.where(pred == Y, 0, self._weights)) for pred in predictions
             ])  # 计算每一个弱分类器的带权重误差
             idx = int(np.argmin(errors))  # 选择最小误差
             if errors[idx] < self.eps:  # 误差达到阈值，停止
@@ -36,6 +38,7 @@ class AdaBoost:
             self.estimators.append(estimators[idx])  # 添加弱分类器
             self._update_alpha(k, errors[idx])  # 更新弱分类器权重
             self._update_weights(k, predictions[idx])  # 更新样本权重
+        self._X, self._Y, self._weights = None, None, None
 
     def predict(self, X: np.ndarray):
         pred = np.array([
@@ -48,8 +51,8 @@ class AdaBoost:
         self.alpha[k] = .5 * np.log((1 - e) / e)
 
     def _update_weights(self, k: int, pred: np.ndarray):  # 更新样本权重
-        exp_res = np.exp(-self.alpha[k] * self.Y * pred)
-        self.weights = self.weights * exp_res / (self.weights @ exp_res)
+        exp_res = np.exp(-self.alpha[k] * self._Y * pred)
+        self._weights = self._weights * exp_res / (self._weights @ exp_res)
 
     class _WeakEstimator:  # 弱分类器, 一阶决策树
         def __init__(self, feature: int):
@@ -58,13 +61,13 @@ class AdaBoost:
 
         def fit(self, X: np.ndarray, Y: np.ndarray):
             pos_corr, neg_corr = np.sum(Y == 1), np.sum(Y == -1)
-            x = X[:, self.feature]
+            Xf = X[:, self.feature]
             if pos_corr >= neg_corr:
-                self.split_value, self.sign, max_corr = np.min(x) - .5, 1.0, pos_corr
+                self.split_value, self.sign, max_corr = np.min(Xf) - .5, 1.0, pos_corr
             else:
-                self.split_value, self.sign, max_corr = np.max(x) + .5, -1.0, neg_corr
-            indices = np.argsort(x)
-            for i in range(len(x) - 1):
+                self.split_value, self.sign, max_corr = np.max(Xf) + .5, -1.0, neg_corr
+            indices = np.argsort(Xf)
+            for i in range(len(Xf) - 1):
                 pos_corr -= Y[indices[i]]
                 neg_corr += Y[indices[i]]
                 if pos_corr > max_corr:
@@ -73,8 +76,8 @@ class AdaBoost:
                     self.sign, max_corr = -1.0, neg_corr
                 else:
                     continue
-                self.split_value = (x[indices[i]] + x[indices[i + 1]]) / 2
-                if max_corr == len(x):
+                self.split_value = (Xf[indices[i]] + Xf[indices[i + 1]]) / 2
+                if max_corr == len(Xf):
                     break
 
         def __call__(self, X: np.ndarray):

@@ -24,7 +24,6 @@ class GMM:
         self.means = np.array(X[random.sample(range(X.shape[0]), self.n_components)])
         # 初始高斯分布协方差均为单位矩阵
         self.covs = np.stack([np.eye(X.shape[1]) for _ in range(self.n_components)])
-
         for i in range(self.max_iter):
             G = self._expect(X)  # E步
             self._maximize(X, G)  # M步
@@ -50,4 +49,4 @@ class GMM:
             X_norm = X - self.means[k]
             self.covs[k] = (G_k * X_norm).T @ X_norm / N[k]
         self.weights = N / X.shape[0]
-        self.covs += self.cov_reg * np.eye(X.shape[1])
+        self.covs += self.cov_reg * np.eye(X.shape[1])  # 添加微小量防止奇异

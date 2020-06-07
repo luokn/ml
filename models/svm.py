@@ -44,10 +44,10 @@ class SVM:
         if kernel == 'rbf':
             self.K = RBFKernel(kwargs['sigma'])  # 径向基核函数
         self.alpha, self.b = None, .0
-        self.X, self.Y = None, None
+        self._X, self._Y = None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        self.X, self.Y = X, Y
+        self._X, self._Y = X, Y
         self.alpha = np.ones([len(X)], dtype=np.float)  # 拉格朗日乘子
         for _ in range(self.max_iter):
             E = np.array([self._calc_error(i) for i in range(len(X))])  # 此次迭代缓存的误差
@@ -101,16 +101,16 @@ class SVM:
 
     @property
     def support_vectors(self):  # 支持向量
-        return self.X[self.alpha > 0]
+        return self._X[self.alpha > 0]
 
     def _g(self, x):  # g(x) =\sum_{i=0}^N alpha_i y_i \kappa(x_i, x)
-        return np.sum(self.alpha * self.Y * self.K(self.X, x)) + self.b
+        return np.sum(self.alpha * self._Y * self.K(self._X, x)) + self.b
 
     def _calc_error(self, i):  # E_i = g(x_i) - y_i
-        return self._g(self.X[i]) - self.Y[i]
+        return self._g(self._X[i]) - self._Y[i]
 
     def _satisfy_kkt(self, i):  # 是否满足KKT条件
-        gi, yi = self._g(self.X[i]), self.Y[i]
+        gi, yi = self._g(self._X[i]), self._Y[i]
         if np.abs(self.alpha[i]) < self.tol:
             return gi * yi >= 1
         if np.abs(self.alpha[i]) > self.C - self.tol:

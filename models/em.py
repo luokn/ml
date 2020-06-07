@@ -16,8 +16,8 @@ class SimpleEM:
 
     def fit(self, X: np.ndarray):
         for _ in range(self.max_iter):
-            M = self._expect(X)
-            self._maximize(X, M)
+            M = self._expect(X)  # E步
+            self._maximize(X, M)  # M步
 
     def _expect(self, X: np.ndarray):  # E步
         p1, p2, p3 = self.prob
