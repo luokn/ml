@@ -8,7 +8,7 @@ class Perceptron:
 
     def __init__(self, input_dim: int, lr: float):
         """
-        :param input_dim: 输入特征长度
+        :param input_dim: 输入特征维度
         :param lr: 学习率
         """
         self.weights = np.random.randn(input_dim + 1)  # 权重

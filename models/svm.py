@@ -6,24 +6,6 @@
 import numpy as np
 
 
-class LinearKernel:
-    def __call__(self, a: np.ndarray, b: np.ndarray):
-        return np.sum(a * b, axis=-1)
-
-
-class PolyKernel:
-    def __call__(self, a: np.ndarray, b: np.ndarray):
-        return (np.sum(a * b, axis=-1) + 1) ** 2
-
-
-class RBFKernel:
-    def __init__(self, sigma):
-        self.divisor = 2 * sigma ** 2
-
-    def __call__(self, a: np.ndarray, b: np.ndarray):
-        return np.exp(-np.sum((a - b) ** 2, axis=-1) / self.divisor)
-
-
 class SVM:
     """
     Support Vector Machines(支持向量机)
@@ -38,11 +20,11 @@ class SVM:
         """
         self.C, self.tol, self.max_iter = C, tol, max_iter
         if kernel == 'linear':
-            self.K = LinearKernel()  # 线性核函数
+            self.K = self._LinearKernel()  # 线性核函数
         if kernel == 'poly':
-            self.K = PolyKernel()  # 多项式核函数
+            self.K = self._PolyKernel()  # 多项式核函数
         if kernel == 'rbf':
-            self.K = RBFKernel(kwargs['sigma'])  # 径向基核函数
+            self.K = self._RBFKernel(kwargs['sigma'])  # 径向基核函数
         self.alpha, self.b = None, .0
         self._X, self._Y = None, None
 
@@ -116,3 +98,18 @@ class SVM:
         if np.abs(self.alpha[i]) > self.C - self.tol:
             return gi * yi <= 1
         return np.abs(gi * yi - 1) < self.tol
+
+    class _LinearKernel:
+        def __call__(self, x: np.ndarray, y: np.ndarray):
+            return np.sum(x * y, axis=-1)
+
+    class _PolyKernel:
+        def __call__(self, x: np.ndarray, y: np.ndarray):
+            return (np.sum(x * y, axis=-1) + 1) ** 2
+
+    class _RBFKernel:
+        def __init__(self, sigma):
+            self.divisor = 2 * sigma ** 2
+
+        def __call__(self, x: np.ndarray, y: np.ndarray):
+            return np.exp(-np.sum((x - y) ** 2, axis=-1) / self.divisor)
