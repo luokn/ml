@@ -32,7 +32,7 @@ class AdaBoost:
             errors = np.array([
                 np.sum(np.where(pred == Y, 0, self._weights)) for pred in predictions
             ])  # 计算每一个弱分类器的带权重误差
-            idx = int(np.argmin(errors))  # 选择最小误差
+            idx = np.argmin(errors).item()  # 选择最小误差
             if errors[idx] < self.eps:  # 误差达到阈值，停止
                 break
             self.estimators.append(estimators[idx])  # 添加弱分类器
