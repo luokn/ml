@@ -33,7 +33,7 @@ class GMM:
         return np.argmax(G, axis=1)
 
     def _expect(self, X: np.ndarray):  # E步
-        C = np.zeros((X.shape[0], self.n_components))
+        C = np.zeros([X.shape[0], self.n_components])
         for k, mean, cov in zip(range(self.n_components), self.means, self.covs):
             dist = multivariate_normal(mean=mean, cov=cov)
             C[:, k] = self.weights[k] * dist.pdf(X)

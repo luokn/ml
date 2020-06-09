@@ -13,13 +13,12 @@ class DecisionTree:
 
     def __init__(self, rate: float = 0.95):
         self.rate = rate
-        self.tree = None
-        self._X, self._Y = None, None
+        self._X, self._Y, self.tree = None, None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
+        self._X, self._Y = X, Y
         indices = np.arange(X.shape[0])  # 所有行索引
         features = np.arange(X.shape[1])  # 所有列索引
-        self._X, self._Y = X, Y
         self.tree = self._create_tree(indices, features)
         self._X, self._Y = None, None
 
@@ -31,8 +30,8 @@ class DecisionTree:
 
     def _predict(self, node, x):
         if isinstance(node, dict):  # 如果节点是树(字典)类型
-            val = x[node['feature']]  # 获取划分特征的值
-            return self._predict(node['trees'][val], x)  # 根据值进行下一次递归
+            key = x[node['feature']]  # 获取划分特征的值
+            return self._predict(node['trees'][key], x)  # 根据值进行下一次递归
         return node  # 如果节点是叶子类型则直接返回该值
 
     def _create_tree(self, indices, features):
@@ -42,9 +41,9 @@ class DecisionTree:
         best_feature = self._select_feature(indices, features)  # 选择香农熵最小的特征
         sub_trees = {}
         rest_features = features[features != best_feature]  # 除去选择的特征
-        for val in np.unique(self._X[indices, best_feature]):  # 为该特征的每一个取值都建立子树
-            sub_indices = self._query_indices(indices, best_feature, val)
-            sub_trees[val.item()] = self._create_tree(sub_indices, rest_features)  # 递归构建子决策树
+        for key in np.unique(self._X[indices, best_feature]):  # 为该特征的每一个取值都建立子树
+            sub_indices = self._query_indices(indices, best_feature, key)
+            sub_trees[key.item()] = self._create_tree(sub_indices, rest_features)  # 递归构建子决策树
         return {'feature': best_feature, 'trees': sub_trees}
 
     def _query_indices(self, indices, feature, value):
