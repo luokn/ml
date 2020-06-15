@@ -11,19 +11,19 @@ class AdaBoost:
     Adaptive Boosting(自适应提升算法)
     """
 
-    def __init__(self, n_estimators: int, eps=1e-5):
+    def __init__(self, n_estimators: int, lr=0.01, eps=1e-5):
         """
         :param n_estimators: 弱分类器个数
         :param eps: 误差阈值
         """
-        self.n_estimators, self.eps = n_estimators, eps
+        self.n_estimators, self.lr, self.eps = n_estimators, lr, eps
         self.estimators = []
         self.alpha = np.empty([n_estimators])  # 弱分类器权重
         self._X, self._Y, self._weights = None, None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         self._X, self._Y, self._weights = X, Y, np.full([len(X)], 1 / len(X))
-        estimators = [self._WeakEstimator(f) for f in range(X.shape[1])]  # 所有特征的弱分类器
+        estimators = [self._WeakEstimator(f, self.lr) for f in range(X.shape[1])]  # 所有特征的弱分类器
         predictions = np.zeros([len(estimators), len(Y)])  # 弱分类器输出
         for i, estimator in enumerate(estimators):
             estimator.fit(X, Y)  # 逐特征训练弱分类器
@@ -55,30 +55,20 @@ class AdaBoost:
         self._weights = self._weights * exp_res / (self._weights @ exp_res)
 
     class _WeakEstimator:  # 弱分类器, 一阶决策树
-        def __init__(self, feature: int):
-            self.feature = feature  # 划分特征
-            self.split_value, self.sign = None, None  # 划分值、符号
+        def __init__(self, feature: int, lr: float):
+            self.feature, self.lr = feature, lr  # 划分特征、学习率
+            self.div, self.sign = None, None  # 划分值、符号
 
         def fit(self, X: np.ndarray, Y: np.ndarray):
-            pos_corr, neg_corr = np.sum(Y == 1), np.sum(Y == -1)
             Xf = X[:, self.feature]
-            if pos_corr >= neg_corr:
-                self.split_value, self.sign, max_corr = np.min(Xf) - .5, 1.0, pos_corr
-            else:
-                self.split_value, self.sign, max_corr = np.max(Xf) + .5, -1.0, neg_corr
-            indices = np.argsort(Xf)
-            for i in range(len(Xf) - 1):
-                pos_corr -= Y[indices[i]]
-                neg_corr += Y[indices[i]]
+            max_corr = 0
+            for value in np.arange(Xf.min(), Xf.max() + self.lr, self.lr):
+                pos_corr = np.sum(np.where(Xf > value, 1, -1) == Y)
+                neg_corr = len(Xf) - pos_corr
                 if pos_corr > max_corr:
-                    self.sign, max_corr = 1.0, pos_corr
+                    self.div, self.sign, max_corr = value, 1, pos_corr
                 elif neg_corr > max_corr:
-                    self.sign, max_corr = -1.0, neg_corr
-                else:
-                    continue
-                self.split_value = (Xf[indices[i]] + Xf[indices[i + 1]]) / 2
-                if max_corr == len(Xf):
-                    break
+                    self.div, self.sign, max_corr = value, -1, neg_corr
 
         def __call__(self, X: np.ndarray):
-            return np.where(X[:, self.feature] > self.split_value, self.sign, -self.sign)
+            return np.where(X[:, self.feature] > self.div, self.sign, -self.sign)
