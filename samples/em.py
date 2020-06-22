@@ -11,7 +11,7 @@ import numpy as np
 sys.path.append(dirname(dirname(abspath(__file__))))
 
 
-def test_em_coin():
+def test_em():
     from models.em import SimpleEM
     y = np.array([1, 1, 0, 1, 0, 0, 1, 0, 1, 1])
     em = SimpleEM([.5, .5, .5], 100)
@@ -24,4 +24,4 @@ def test_em_coin():
 
 
 if __name__ == '__main__':
-    test_em_coin()
+    test_em()
