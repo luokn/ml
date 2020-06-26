@@ -60,8 +60,7 @@ class AdaBoost:
             self.div, self.sign = None, None  # 划分值、符号
 
         def fit(self, X: np.ndarray, Y: np.ndarray):
-            Xf = X[:, self.feature]
-            max_corr = 0
+            Xf, max_corr = X[:, self.feature], 0
             for value in np.arange(Xf.min(), Xf.max() + self.lr, self.lr):
                 pos_corr = np.sum(np.where(Xf > value, 1, -1) == Y)
                 neg_corr = len(Xf) - pos_corr
