@@ -47,4 +47,4 @@ def test_decision_tree():
 
 
 if __name__ == '__main__':
-    test_dkeysion_tree()
+    test_decision_tree()
