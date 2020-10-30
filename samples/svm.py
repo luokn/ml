@@ -3,13 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import sys
-from os.path import dirname, abspath
-
-import matplotlib.pyplot as plt
 import numpy as np
-
-sys.path.append(dirname(dirname(abspath(__file__))))
+import matplotlib.pyplot as plt
 
 
 def test_svm():

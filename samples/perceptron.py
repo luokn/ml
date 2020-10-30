@@ -3,13 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import sys
-from os.path import dirname, abspath
-
-import numpy as np
 import matplotlib.pyplot as plt
-
-sys.path.append(dirname(dirname(abspath(__file__))))
+import numpy as np
 
 
 def test_perceptron():

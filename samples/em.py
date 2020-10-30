@@ -3,12 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import sys
-from os.path import dirname, abspath
 
 import numpy as np
-
-sys.path.append(dirname(dirname(abspath(__file__))))
 
 
 def test_em():
