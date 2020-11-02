@@ -7,10 +7,10 @@ import numpy as np
 
 
 class LLE:
-    def __init__(self, K: int):
-        self.K = K
+    def __init__(self, k: int):
+        self.k = k
         self.W = None
 
     def fit(self, X: np.array):
-        self.W = np.zeros([len(X), self.K])
+        self.W = np.zeros([len(X), self.k])  # N × k
         pass
