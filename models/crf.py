@@ -10,4 +10,4 @@ class CRF:
     """
     Conditional random field(条件随机场)
     """
-    pass
+    ...

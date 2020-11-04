@@ -10,4 +10,4 @@ class CART:
     """
     Classification and Regression Trees(分类和回归树)
     """
-    pass
+    ...

@@ -10,4 +10,4 @@ class LDA:
     """
     Linear Discriminant Analysis(线性判别分析)
     """
-    pass
+    ...

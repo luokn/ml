@@ -10,3 +10,4 @@ class ELM:
     """
     Extreme learning machine(极限学习机)
     """
+    ...

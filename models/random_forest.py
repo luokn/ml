@@ -10,4 +10,4 @@ class RandomForest:
     """
     Random forest(随机森林)
     """
-    pass
+    ...

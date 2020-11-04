@@ -10,4 +10,4 @@ class GPR:
     """
     Gaussian Process Regression(高斯过程回归)
     """
-    pass
+    ...
