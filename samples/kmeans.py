@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 
 
 def test_kmeans():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.kmeans import KMeans
 
     x = np.random.randn(3, 200, 2)

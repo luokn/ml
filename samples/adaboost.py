@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 
 
 def test_adaboost():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.adaboost import AdaBoost
 
     x, y = np.random.randn(2, 200, 2), np.zeros([2, 200])

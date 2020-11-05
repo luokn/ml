@@ -2,11 +2,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from models.lle import LLE
 
 # %%
 
 if __name__ == "__main__":
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
+    from models.lle import LLE
     lle = LLE(3, 1)
     X = np.random.randn(10, 3)
     Y = lle.transform(X)

@@ -8,6 +8,9 @@ import numpy as np
 
 
 def test_em():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.em import SimpleEM
     y = np.array([1, 1, 0, 1, 0, 0, 1, 0, 1, 1])
     em = SimpleEM([.5, .5, .5], 100)

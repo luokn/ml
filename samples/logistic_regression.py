@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 
 
 def test_logistic_regression():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.logistic_regression import LogisticRegression
     x, y = np.random.randn(2, 500, 2), np.zeros([2, 500])
     x[0] += np.array([1, -1])  # 左上方移动

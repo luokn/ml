@@ -8,6 +8,9 @@ import numpy as np
 
 
 def test_decision_tree():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.decision_tree import DecisionTree
 
     X = np.array([

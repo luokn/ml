@@ -9,6 +9,9 @@ import numpy as np
 
 
 def test_knn():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.knn import KNN
 
     x, y = np.random.randn(3, 200, 2), np.zeros([3, 200])

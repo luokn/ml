@@ -8,6 +8,9 @@ import numpy as np
 
 
 def test_perceptron():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.perceptron import Perceptron
 
     x, y = np.random.randn(2, 500, 2), np.zeros([2, 500], dtype=int)

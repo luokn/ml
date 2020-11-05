@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 
 
 def test_gmm():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.gmm import GMM
     x = np.stack([
         np.random.multivariate_normal(mean=[5, 0], cov=[[2, 0], [0, 2]], size=[1000]),

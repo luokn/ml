@@ -8,6 +8,9 @@ import numpy as np
 
 
 def test_naive_bayes():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.naive_bayes import NaiveBayesClassifier
 
     # 参照李航《统计学习方法（第一版）》第四章例4.1

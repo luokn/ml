@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 
 
 def test_svm():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.svm import SVM
 
     x, y = np.random.randn(2, 400, 2), np.zeros([2, 400], dtype=int)

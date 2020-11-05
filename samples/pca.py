@@ -8,6 +8,9 @@ import numpy as np
 
 
 def test_pca():
+    import sys
+    from os.path import dirname
+    sys.path.append(dirname(dirname(__file__)))
     from models.pca import PCA
 
     x = np.random.randn(3, 200, 2)
