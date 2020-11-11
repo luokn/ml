@@ -4,6 +4,7 @@
 # @Email : olooook@outlook.com
 
 import random
+
 import numpy as np
 from scipy.stats import multivariate_normal
 

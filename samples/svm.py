@@ -3,8 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def test_svm():
