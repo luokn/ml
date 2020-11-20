@@ -29,9 +29,13 @@ class LLE:
         W = np.zeros([len(X), len(X)])  # M × M
         for i, x in enumerate(X):
             topk = np.linalg.norm(x - X, axis=1).argsort()[1:self.k + 1]  # 找出距离最近的k个点的下标，排除自身
-            w = np.linalg.inv(X[topk] @ X[topk].T).sum(axis=1)  # 计算w
+            S = x - X[topk]  # M × k
+            S = S.T @ S  # S = (x_i - N_i)^T (x_i - N_i) => k × k
+            w = np.linalg.inv(S).sum(axis=1)  # 计算w
             W[i, topk] = w / w.sum()  # 归一化并扩展到所有点上
-        W = np.eye(len(X)) - W
-        L, U = np.linalg.eig(W @ W.T)  # 对M = (I - W)(I - W)^T进行特征值分解
+        M = np.eye(len(X)) - W
+        M @= M.T  # M = (I - W)(I - W) ^ T
+        L, U = np.linalg.eig(M)  # 对M进行特征值分解
         topd = L.argsort()[1:self.d + 1]  # 选取前d个非0特征值
+        np.tile()
         return U[topd].T  # 降维后的数据为选取的特征值对应的特征向量
