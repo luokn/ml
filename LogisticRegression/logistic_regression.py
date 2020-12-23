@@ -58,14 +58,10 @@ def test_logistic_regression():
 
 def train_logistic_regression(model, x, y, batch_size, epochs):
     indices = np.arange(len(x))
-    for epoch in range(epochs):
+    for _ in range(epochs):
         np.random.shuffle(indices)
-        shf_x, shf_y = x[indices], y[indices]
-        bat_s, bat_e = 0, batch_size
-        while bat_e <= len(x):
-            model.fit(shf_x[bat_s:bat_e], shf_y[bat_s:bat_e])
-            bat_s = bat_e
-            bat_e += batch_size
+        for i in range(batch_size, len(x) + 1, batch_size):
+            model.fit(x[indices[(i - batch_size):i]], y[indices[(i - batch_size):i]])
 
 
 def plot_scatter(xy0, xy1, title):
