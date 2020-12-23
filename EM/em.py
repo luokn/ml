@@ -31,3 +31,18 @@ class SimpleEM:
         self.prob[2] = np.sum((1 - M) * X) / np.sum(1 - M)
 
 # EM算法与高斯混合模型可参见./gmm.py
+
+
+def test_em():
+    y = np.array([1, 1, 0, 1, 0, 0, 1, 0, 1, 1])
+    em = SimpleEM([.5, .5, .5], 100)
+    em.fit(y)
+    print(em.prob)  # [0.5, 0.6, 0.6]
+
+    em = SimpleEM([.4, .6, .7], 100)
+    em.fit(y)
+    print(em.prob)  # [0.4064, 0.5368, 0.6432]
+
+
+if __name__ == '__main__':
+    test_em()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Date  : 2020/5/24
+# @Date  : 2020/5/20
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
@@ -7,12 +7,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def test_pca():
-    import sys
-    from os.path import dirname
-    sys.path.append(dirname(dirname(__file__)))
-    from models.pca import PCA
+class PCA:
+    """
+    Principal Components Analysis(主成分分析)
+    """
 
+    def __init__(self, k: int):
+        """
+        :param k: 保留的主成因个数
+        """
+        self.k = k
+
+    def transform(self, X: np.ndarray):
+        X_norm = X - X.mean(axis=0)  # 去中心化
+        L, U = np.linalg.eig(X_norm.T @ X_norm)  # 对协方差矩阵进行特征值分解
+        topk = np.argsort(L)[::-1][:self.k]  # 找出特征值中前K大特征对应的索引
+        return X_norm @ U[:, topk]  # 将去中心化矩阵乘以前K大特征对应的特征向量
+
+
+def test_pca():
     x = np.random.randn(3, 200, 2)
     x[1] += np.array([-2, 0])
     x[2] += np.array([2, 0])

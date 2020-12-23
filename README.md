@@ -1,42 +1,30 @@
-##  经典机器学习算法的极简实现
+## 经典机器学习算法的极简实现
 
 #### 感知机
 
-- :white_check_mark:代码：[models/perceptron.py](./models/perceptron.py)
-
-- :white_check_mark:用例：[samples/perceptron.py](./samples/perceptron.py)
+-   :white_check_mark:代码：[Perceptron/perceptron.py](./Perceptron/perceptron.py)
 
 #### 逻辑斯蒂回归
 
-- :white_check_mark:代码：[models/logistic_regression.py](./models/logistic_regression.py)
-
-- :white_check_mark:用例：[samples/logistic_regression.py](./samples/logistic_regression.py)
+-   :white_check_mark:代码：[LogisticRegression/logistic_regression.py](./LogisticRegression/logistic_regression.py)
 
 #### 朴素贝叶斯
 
-- :white_check_mark:代码：[models/naive_bayes.py](models/naive_bayes.py)
-
-- :white_check_mark:用例：[samples/naive_bayes.py](samples/naive_bayes.py)
+-   :white_check_mark:代码：[NaiveBayes/naive_bayes.py](NaiveBayes/naive_bayes.py)
 
 #### 决策树
 
-- :white_check_mark:代码：[models/decision_tree.py](./models/decision_tree.py)
-
-- :white_check_mark:用例：[samples/decision_tree.py](./samples/decision_tree.py)
+-   :white_check_mark:代码：[DecisionTree/decision_tree.py](./DecisionTree/decision_tree.py)
 
 #### 支持向量机
 
-- :white_check_mark:代码：[models/svm.py](./models/svm.py)
-
-- :white_check_mark:用例：[samples/svm.py](./samples/svm.py)
+-   :white_check_mark:代码：[SVM/svm.py](./SVM/svm.py)
 
 #### 极限学习机
 
 #### 主成因分析
 
-- :white_check_mark:代码：[models/pca.py](./models/pca.py)
-
-- :white_check_mark:用例：[samples/pca.py](./samples/pca.py)
+-   :white_check_mark:代码：[PCA/pca.py](./PCA/pca.py)
 
 #### 线性判别分析
 
@@ -48,35 +36,25 @@
 
 #### 高斯混合模型
 
-- :white_check_mark:代码：[models/gmm.py](./models/gmm.py)
-
-- :white_check_mark:用例：[samples/gmm.py](./samples/gmm.py)
+-   :white_check_mark:代码：[GMM/gmm.py](./GMM/gmm.py)
 
 #### 随机森林
 
-#### EM算法
+#### EM 算法
 
-- :white_check_mark:代码：[models/em.py](./models/em.py)
+-   :white_check_mark:代码：[EM/em.py](./EM/em.py)
 
-- :white_check_mark:用例：[samples/em.py](./samples/em.py)
+#### K 近邻
 
-#### K近邻
-
-- :white_check_mark:代码：[models/knn.py](./models/knn.py)
-
-- :white_check_mark:用例：[samples/knn.py](./samples/knn.py)
+-   :white_check_mark:代码：[KNN/knn.py](./KNN/knn.py)
 
 #### K-Means
 
-- :white_check_mark:代码：[models/kmeans.py](./models/kmeans.py)
-
-- :white_check_mark:用例：[samples/kmeans.py](./samples/kmeans.py)
+-   :white_check_mark:代码：[Kmeans/kmeans.py](./Kmeans/kmeans.py)
 
 #### AdaBoost
 
-- :white_check_mark:代码：[models/adaboost.py](./models/adaboost.py)
-
-- :white_check_mark:用例：[samples/adaboost.py](./samples/adaboost.py)
+-   :white_check_mark:代码：[Adaboost/adaboost.py](./Adaboost/adaboost.py)
 
 #### CART
 
@@ -84,12 +62,6 @@
 
 #### FCM
 
-- :white_check_mark:代码：[models/fcm.py](./models/fcm.py)
-
-- :white_check_mark:用例：[samples/fcm.py](./samples/fcm.py)
+-   :white_check_mark:代码：[FCM/fcm.py](./FCM/fcm.py)
 
 ### LLE
-
-
-
-
