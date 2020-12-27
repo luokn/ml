@@ -4,6 +4,7 @@
 # @Email : olooook@outlook.com
 
 import numpy as np
+from numpy.lib.npyio import load
 
 
 class DecisionTree:
@@ -79,8 +80,8 @@ class DecisionTree:
         return features[f]  # 返回信息增益最大的特征
 
 
-def test_decision_tree():
-    X = np.array([
+def load_data():
+    x = np.array([
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 1],
@@ -99,18 +100,17 @@ def test_decision_tree():
         [1, 1, 1],
         [1, 1, 1],
     ])
-    Y = np.array([1 if np.sum(x) >= 2 else 0 for x in X])
-
-    dec_tree = DecisionTree(rate=0.95)
-    dec_tree.fit(X, Y)
-    print(dec_tree.tree)
-
-    print(Y)
-    pred = dec_tree.predict(X)
-    print(pred)
-    acc = np.sum(pred == Y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    y = np.array([1 if np.sum(xi) >= 2 else 0 for xi in x])
+    return x, y
 
 
 if __name__ == '__main__':
-    test_decision_tree()
+    x, y = load_data()
+    decision_tree = DecisionTree(rate=0.95)
+    decision_tree.fit(x, y)
+    print(decision_tree.tree)
+    pred = decision_tree.predict(x)
+    print(y)
+    print(pred)
+    acc = np.sum(pred == y) / len(pred)
+    print(f'Acc = {100 * acc:.2f}%')

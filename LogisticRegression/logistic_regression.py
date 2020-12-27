@@ -36,24 +36,12 @@ class LogisticRegression:
         return 1 / (1 + np.exp(-x))
 
 
-def test_logistic_regression():
+def load_data():
     x, y = np.random.randn(2, 500, 2), np.zeros([2, 500])
     x[0] += np.array([1, -1])  # 左上方移动
     x[1] += np.array([-1, 1])  # 右下方移动
     y[1] = 1
-    plot_scatter(x[0], x[1], 'Real')
-
-    x = x.reshape(-1, 2)
-    y = y.flatten()
-
-    logistic = LogisticRegression(2, lr=1e-3)
-    train_logistic_regression(logistic, x, y, batch_size=32, epochs=100)
-
-    pred = logistic.predict(x)
-    plot_scatter_with_line(x[pred == 0], x[pred == 1], logistic.weights, 'Pred')
-
-    acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    return x, y
 
 
 def train_logistic_regression(model, x, y, batch_size, epochs):
@@ -92,4 +80,19 @@ def plot_scatter_with_line(xy0, xy1, weights, title):
 
 
 if __name__ == '__main__':
-    test_logistic_regression()
+    x, y = load_data()
+    plot_scatter(x[0], x[1], 'Real')
+
+    # train
+    x = x.reshape(-1, 2)
+    y = y.flatten()
+    logistic_regression = LogisticRegression(2, lr=1e-3)
+    train_logistic_regression(logistic_regression, x, y, batch_size=32, epochs=100)
+
+    # predict
+    pred = logistic_regression.predict(x)
+    plot_scatter_with_line(x[pred == 0], x[pred == 1], logistic_regression.weights, 'Pred')
+
+    # accuracy
+    acc = np.sum(pred == y) / len(pred)
+    print(f'Acc = {100 * acc:.2f}%')

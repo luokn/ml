@@ -30,25 +30,13 @@ class Perceptron:
         return np.concatenate([x, np.ones([len(x), 1])], axis=1)
 
 
-def test_perceptron():
+def load_data():
     x, y = np.random.randn(2, 500, 2), np.zeros([2, 500], dtype=int)
     x[0] += np.array([1, -1])
     x[1] += np.array([-1, 1])
     y[0] = -1
     y[1] = 1
-    plot_scatter(x[0], x[1], 'Real')
-
-    x = x.reshape(-1, 2)
-    y = y.flatten()
-
-    perceptron = Perceptron(input_dim=2, lr=1e-4)
-    train_perceptron(perceptron, x, y, epochs=100)
-
-    pred = perceptron.predict(x)
-    plot_scatter_with_line(x[pred == -1], x[pred == 1], perceptron.weights, 'Pred')
-
-    acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    return x, y
 
 
 def train_perceptron(model, x, y, epochs):
@@ -87,4 +75,18 @@ def plot_scatter_with_line(xy0, xy1, weights, title):
 
 
 if __name__ == '__main__':
-    test_perceptron()
+    x, y = load_data()
+    plot_scatter(x[0], x[1], 'Real')
+
+    # train
+    x = x.reshape(-1, 2)
+    y = y.flatten()
+    perceptron = Perceptron(input_dim=2, lr=1e-4)
+    train_perceptron(perceptron, x, y, epochs=100)
+
+    # predict
+    pred = perceptron.predict(x)
+    plot_scatter_with_line(x[pred == -1], x[pred == 1], perceptron.weights, 'Pred')
+
+    acc = np.sum(pred == y) / len(pred)
+    print(f'Acc = {100 * acc:.2f}%')

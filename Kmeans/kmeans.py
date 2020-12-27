@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import random
 
 import numpy as np
+from numpy.lib.npyio import load
 
 
 class KMeans:
@@ -45,19 +46,11 @@ class KMeans:
         return Y
 
 
-def test_kmeans():
+def load_data():
     x = np.random.randn(3, 200, 2)
     x[1] += np.array([2, 2])  # 右偏移2，上偏移2
     x[2] += np.array([2, -2])  # 右偏移2，下偏移2
-
-    plot_scatter(x, 'Real')
-    x = x.reshape(-1, 2)
-
-    kmeans = KMeans(3)
-    pred = kmeans.predict(x)
-    centers = kmeans.centers
-
-    plot_scatter_with_centers([x[pred == i] for i in [0, 1, 2]], centers, 'Pred')
+    return x
 
 
 def plot_scatter(xys, title):
@@ -78,4 +71,11 @@ def plot_scatter_with_centers(xys, centers, title):
 
 
 if __name__ == '__main__':
-    test_kmeans()
+    x = load_data()
+    plot_scatter(x, 'Real')
+
+    x = x.reshape(-1, 2)
+    kmeans = KMeans(3)
+    pred = kmeans.predict(x)
+
+    plot_scatter_with_centers([x[pred == i] for i in [0, 1, 2]], kmeans.centers, 'Pred')

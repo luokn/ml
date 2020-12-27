@@ -54,19 +54,12 @@ class GMM:
         self.covs += self.cov_reg * np.eye(X.shape[1])  # 添加微小量防止奇异
 
 
-def test_gmm():
+def load_data():
     x = np.stack([
         np.random.multivariate_normal(mean=[5, 0], cov=[[2, 0], [0, 2]], size=[1000]),
         np.random.multivariate_normal(mean=[0, 5], cov=[[2, 0], [0, 1]], size=[1000])
     ])
-    plot_scatter(x, 'Real')
-    x = x.reshape(-1, 2)
-
-    gmm = GMM(2, max_iter=1000)
-    gmm.fit(x)
-
-    pred = gmm.predict(x)
-    plot_scatter([x[pred == i] for i in [0, 1]], 'Pred')
+    return x
 
 
 def plot_scatter(xys, title):
@@ -78,4 +71,12 @@ def plot_scatter(xys, title):
 
 
 if __name__ == '__main__':
-    test_gmm()
+    x = load_data()
+    plot_scatter(x, 'Real')
+
+    x = x.reshape(-1, 2)
+    gmm = GMM(2, max_iter=1000)
+    gmm.fit(x)
+
+    pred = gmm.predict(x)
+    plot_scatter([x[pred == i] for i in [0, 1]], 'Pred')

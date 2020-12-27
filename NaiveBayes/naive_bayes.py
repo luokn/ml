@@ -48,21 +48,25 @@ class NaiveBayesClassifier:
         return counter / counter.sum()
 
 
-def test_naive_bayes():
+def load_data():
     # 参照李航《统计学习方法（第一版）》第四章例4.1
-    X = np.array([
+    x = np.array([
         [0, 0], [0, 1], [0, 1], [0, 0], [0, 0],
         [1, 0], [1, 1], [1, 1], [1, 2], [1, 2],
         [2, 2], [2, 1], [2, 1], [2, 2], [2, 2]
     ], dtype=int)
-    Y = np.array([
+    y = np.array([
         0, 0, 1, 1, 0,
         0, 0, 1, 1, 1,
         1, 1, 1, 1, 0
     ], dtype=int)
+    return x, y
 
+
+if __name__ == "__main__":
+    x, y = load_data()
     bayes = NaiveBayesClassifier([3, 3], 2)
-    bayes.fit(X, Y)
+    bayes.fit(x, y)
 
     print(bayes.prior_prob)  # 先验概率
     # [10/17, 7/17]
@@ -72,7 +76,3 @@ def test_naive_bayes():
     # [4/9, 3/9, 2/9]
     # [3/12, 4/12, 5/12]
     # [2/12, 5/12, 5/12]
-
-
-if __name__ == "__main__":
-    test_naive_bayes()

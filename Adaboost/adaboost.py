@@ -74,12 +74,25 @@ class AdaBoost:
             return np.where(X[:, self.feature] > self.div, self.sign, -self.sign)
 
 
-def test_adaboost():
+def load_data():
     x, y = np.random.randn(2, 200, 2), np.zeros([2, 200])
     x[0] += np.array([-1, 0])
     x[1] += np.array([1, -1])
     y[0] = -1
     y[1] = 1
+    return x, y
+
+
+def plot_scatter(xys, title):
+    plt.figure(figsize=(10, 10))
+    for xy, color in zip(xys, ['r', 'g', 'b']):
+        plt.scatter(xy[:, 0], xy[:, 1], color=color)
+    plt.title(title)
+    plt.show()
+
+
+if __name__ == '__main__':
+    x, y = load_data()
     plot_scatter(x, 'Real')
 
     x = x.reshape(-1, 2)
@@ -95,15 +108,3 @@ def test_adaboost():
     # print accuracy
     acc = np.sum(pred == y) / len(pred)
     print(f'Acc = {100 * acc:.2f}%')
-
-
-def plot_scatter(xys, title):
-    plt.figure(figsize=(10, 10))
-    for xy, color in zip(xys, ['r', 'g', 'b']):
-        plt.scatter(xy[:, 0], xy[:, 1], color=color)
-    plt.title(title)
-    plt.show()
-
-
-if __name__ == '__main__':
-    test_adaboost()

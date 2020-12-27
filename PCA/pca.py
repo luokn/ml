@@ -25,7 +25,7 @@ class PCA:
         return X_norm @ U[:, topk]  # 将去中心化矩阵乘以前K大特征对应的特征向量
 
 
-def test_pca():
+def load_data():
     x = np.random.randn(3, 200, 2)
     x[1] += np.array([-2, 0])
     x[2] += np.array([2, 0])
@@ -39,16 +39,7 @@ def test_pca():
 
     x = x.reshape(-1, 2)
     x = x @ scale @ rotate.T
-
-    plot_scatter(x.reshape(3, -1, 2), 'Before PCA')
-
-    # 不降维
-    x_2d = PCA(2).transform(x)
-    plot_scatter(x_2d.reshape(3, -1, 2), 'PCA 2D')
-
-    # 降为1维
-    x_1d = PCA(1).transform(x)
-    plot_scatter(np.concatenate([x_1d.reshape(3, -1, 1), np.zeros([3, 200, 1])], axis=-1), 'PCA 1D')
+    return x
 
 
 def plot_scatter(xys, title):
@@ -62,4 +53,13 @@ def plot_scatter(xys, title):
 
 
 if __name__ == '__main__':
-    test_pca()
+    x = load_data()
+    plot_scatter(x.reshape(3, -1, 2), 'Before PCA')
+
+    # 不降维
+    x_2d = PCA(2).transform(x)
+    plot_scatter(x_2d.reshape(3, -1, 2), 'PCA 2D')
+
+    # 降为1维
+    x_1d = PCA(1).transform(x)
+    plot_scatter(np.concatenate([x_1d.reshape(3, -1, 1), np.zeros([3, 200, 1])], axis=-1), 'PCA 1D')

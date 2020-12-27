@@ -32,27 +32,13 @@ class KNN:
         return Y
 
 
-def test_knn():
+def load_data():
     x, y = np.random.randn(3, 200, 2), np.zeros([3, 200])
     x[0] += np.array([2, 2])  # 右偏移2，上偏移2
     x[1] += np.array([2, -2])  # 右偏移2，下偏移2
     y[1] = 1
     y[2] = 2
-    plot_scatter(x, 'Real')
-
-    x = x.reshape(-1, 2)
-    y = y.flatten()
-
-    # train
-    knn = KNN(3)
-    knn.fit(x, y)
-
-    pred = knn.predict(x)
-    plot_scatter([x[pred == i] for i in [0, 1, 2]], 'Pred')
-
-    # print accuracy
-    acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    return x, y
 
 
 def plot_scatter(xys, title):
@@ -64,4 +50,19 @@ def plot_scatter(xys, title):
 
 
 if __name__ == '__main__':
-    test_knn()
+    x, y = load_data()
+    plot_scatter(x, 'Real')
+
+    # train
+    x = x.reshape(-1, 2)
+    y = y.flatten()
+    knn = KNN(3)
+    knn.fit(x, y)
+
+    # predict
+    pred = knn.predict(x)
+    plot_scatter([x[pred == i] for i in [0, 1, 2]], 'Pred')
+
+    # accuracy
+    acc = np.sum(pred == y) / len(pred)
+    print(f'Acc = {100 * acc:.2f}%')
