@@ -22,7 +22,7 @@ class LogisticRegression:
         grad = x_pad.T @ (pred - Y) / len(pred)  # 计算梯度
         self.weights -= self.lr * grad  # 沿负梯度更新参数
 
-    def predict(self, X: np.ndarray):
+    def __call__(self, X: np.ndarray):
         x_pad = self._pad(X)  # 为X填充1作为偏置
         pred = self._sigmoid(x_pad @ self.weights)  # 计算预测值
         return np.where(pred > 0.5, 1, 0)  # 将(0, 1)之间分布的概率转化为{0, 1}标签
@@ -37,14 +37,15 @@ class LogisticRegression:
 
 
 def load_data():
-    x, y = np.random.randn(2, 500, 2), np.zeros([2, 500])
-    x[0] += np.array([1, -1])  # 左上方移动
-    x[1] += np.array([-1, 1])  # 右下方移动
-    y[1] = 1
+    x = np.stack([
+        np.random.randn(500, 2) + np.array([1, -1]),
+        np.random.randn(500, 2) + np.array([-1, 1]),
+    ])
+    y = np.stack([np.full([500], 0), np.full([500], 1)])
     return x, y
 
 
-def train_logistic_regression(model, x, y, batch_size, epochs):
+def train_logistic_regression(model, x, y, epochs, batch_size=32):
     indices = np.arange(len(x))
     for _ in range(epochs):
         np.random.shuffle(indices)
@@ -52,47 +53,36 @@ def train_logistic_regression(model, x, y, batch_size, epochs):
             model.fit(x[indices[(i - batch_size):i]], y[indices[(i - batch_size):i]])
 
 
-def plot_scatter(xy0, xy1, title):
-    plt.figure(figsize=[8, 8])
-    plt.scatter(xy0[:, 0], xy0[:, 1], color='r', marker='.')
-    plt.scatter(xy1[:, 0], xy1[:, 1], color='g', marker='.')
-    plt.xlim(-5, 5)
-    plt.ylim(-5, 5)
-    plt.title(title)
-    plt.show()
-
-
-def plot_scatter_with_line(xy0, xy1, weights, title):
-    plt.figure(figsize=[8, 8])
-    plt.scatter(xy0[:, 0], xy0[:, 1], color='r', marker='.')
-    plt.scatter(xy1[:, 0], xy1[:, 1], color='g', marker='.')
-    plt.xlim(-5, 5)
-    plt.ylim(-5, 5)
-    plt.title(title)
-
-    # plot the dividing line
-    ln_x = np.linspace(-5, 5, 100)
-    ln_a = - weights[0] / weights[1]
-    ln_b = - weights[2] / weights[1]
-    ln_y = ln_a * ln_x + ln_b
-    plt.plot(ln_x, ln_y, color='b', linewidth=1)
-    plt.show()
-
-
 if __name__ == '__main__':
     x, y = load_data()
-    plot_scatter(x[0], x[1], 'Real')
+    plt.figure(figsize=[12, 6])
+    plt.subplot(1, 2, 1)
+    plt.title('Real')
+    plt.xlim(-5, 5)
+    plt.ylim(-5, 5)
+    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
+    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
 
-    # train
     x = x.reshape(-1, 2)
     y = y.flatten()
     logistic_regression = LogisticRegression(2, lr=1e-3)
-    train_logistic_regression(logistic_regression, x, y, batch_size=32, epochs=100)
+    train_logistic_regression(logistic_regression, x, y, epochs=500)
 
-    # predict
-    pred = logistic_regression.predict(x)
-    plot_scatter_with_line(x[pred == 0], x[pred == 1], logistic_regression.weights, 'Pred')
-
-    # accuracy
+    pred = logistic_regression(x)
     acc = np.sum(pred == y) / len(pred)
     print(f'Acc = {100 * acc:.2f}%')
+
+    z = x[pred == 0], x[pred == 1]
+    plt.subplot(1, 2, 2)
+    plt.title('Pred')
+    plt.xlim(-5, 5)
+    plt.ylim(-5, 5)
+    plt.scatter(z[0][:, 0], z[0][:, 1], color='r', marker='.')
+    plt.scatter(z[1][:, 0], z[1][:, 1], color='g', marker='.')
+
+    w = logistic_regression.weights
+    a, b = - w[0] / w[1], - w[2] / w[1]
+    line_x = np.linspace(-5, 5, 100)
+    line_y = a * line_x + b
+    plt.plot(line_x, line_y, color='b', linewidth=1)
+    plt.show()
