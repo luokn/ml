@@ -11,11 +11,11 @@ class SimpleEM:
     Expectation-maximization algorithm(期望最大算法,三硬币模型)
     """
 
-    def __init__(self, prob: list, max_iter=100):
-        self.prob, self.max_iter = np.array(prob), max_iter
+    def __init__(self, prob: list, iterations=100):
+        self.prob, self.iterations = np.array(prob), iterations
 
     def fit(self, X: np.ndarray):
-        for _ in range(self.max_iter):
+        for _ in range(self.iterations):
             M = self._expect(X)  # E步
             self._maximize(X, M)  # M步
 
@@ -33,16 +33,13 @@ class SimpleEM:
 # EM算法与高斯混合模型可参见./gmm.py
 
 
-def test_em():
-    y = np.array([1, 1, 0, 1, 0, 0, 1, 0, 1, 1])
+if __name__ == '__main__':
+    x = np.array([1, 1, 0, 1, 0, 0, 1, 0, 1, 1])
+
     em = SimpleEM([.5, .5, .5], 100)
-    em.fit(y)
+    em.fit(x)
     print(em.prob)  # [0.5, 0.6, 0.6]
 
     em = SimpleEM([.4, .6, .7], 100)
-    em.fit(y)
+    em.fit(x)
     print(em.prob)  # [0.4064, 0.5368, 0.6432]
-
-
-if __name__ == '__main__':
-    test_em()
