@@ -37,10 +37,8 @@ class LogisticRegression:
 
 
 def load_data():
-    x = np.stack([
-        np.random.randn(500, 2) + np.array([1, -1]),
-        np.random.randn(500, 2) + np.array([-1, 1]),
-    ])
+    x = np.stack([np.random.randn(500, 2) + np.array([1, -1]),
+                  np.random.randn(500, 2) + np.array([-1, 1])])
     y = np.stack([np.full([500], 0), np.full([500], 1)])
     return x, y
 
@@ -55,6 +53,7 @@ def train_logistic_regression(model, x, y, epochs, batch_size=32):
 
 if __name__ == '__main__':
     x, y = load_data()
+
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title('Real')

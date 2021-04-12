@@ -68,10 +68,8 @@ class WeakEstimator:  # 弱分类器, 一阶决策树
 
 
 def load_data():
-    x = np.stack([
-        np.random.randn(200, 2) + np.array([-1, 0]),
-        np.random.randn(200, 2) + np.array([1, -1])
-    ])
+    x = np.stack([np.random.randn(200, 2) + np.array([-1, 0]),
+                  np.random.randn(200, 2) + np.array([1, -1])])
     y = np.stack([np.full([200], -1), np.full([200], 1)])
     return x, y
 

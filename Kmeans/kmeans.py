@@ -46,11 +46,9 @@ class KMeans:
 
 
 def load_data():
-    x = np.stack([
-        np.random.randn(200, 2) + np.array([2, 2]),
-        np.random.randn(200, 2),
-        np.random.randn(200, 2) + np.array([2, -2]),
-    ])
+    x = np.stack([np.random.randn(200, 2) + np.array([2, 2]),
+                  np.random.randn(200, 2),
+                  np.random.randn(200, 2) + np.array([2, -2]), ])
     return x
 
 

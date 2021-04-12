@@ -33,21 +33,11 @@ class KNN:
 
 
 def load_data():
-    x = np.stack([
-        np.random.randn(200, 2) + np.array([2, 2]),
-        np.random.randn(200, 2),
-        np.random.randn(200, 2) + np.array([2, -2]),
-    ])
+    x = np.stack([np.random.randn(200, 2) + np.array([2, 2]),
+                  np.random.randn(200, 2),
+                  np.random.randn(200, 2) + np.array([2, -2]), ])
     y = np.stack([np.full([200], 0), np.full([200], 1), np.full([200], 2)])
     return x, y
-
-
-def plot_scatter(xys, title):
-    plt.figure(figsize=(10, 10))
-    for xy, color in zip(xys, ['r', 'g', 'b']):
-        plt.scatter(xy[:, 0], xy[:, 1], color=color)
-    plt.title(title)
-    plt.show()
 
 
 if __name__ == '__main__':
