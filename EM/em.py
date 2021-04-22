@@ -8,7 +8,7 @@ import numpy as np
 
 class SimpleEM:
     """
-    Expectation-maximization algorithm(期望最大算法,三硬币模型)
+    Expectation-maximization algorithm(期望最大算法, 三硬币模型)
     """
 
     def __init__(self, prob: list, iterations=100):
