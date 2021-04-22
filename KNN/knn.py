@@ -35,7 +35,7 @@ class KNN:
 def load_data():
     x = np.stack([np.random.randn(200, 2) + np.array([2, 2]),
                   np.random.randn(200, 2),
-                  np.random.randn(200, 2) + np.array([2, -2]), ])
+                  np.random.randn(200, 2) + np.array([2, -2])])
     y = np.stack([np.full([200], 0), np.full([200], 1), np.full([200], 2)])
     return x, y
 
@@ -55,12 +55,12 @@ if __name__ == '__main__':
     knn.fit(x, y)
     pred = knn(x)
     acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    print(f'Accuracy = {100 * acc:.2f}%')
 
-    z = [x[pred == c] for c in [0, 1, 2]]
+    x0, x1, x2 = x[pred == 0], x[pred == 1], x[pred == 2]
     plt.subplot(1, 2, 2)
     plt.title('Pred')
-    plt.scatter(z[0][:, 0], z[0][:, 1], color='r', marker='.')
-    plt.scatter(z[1][:, 0], z[1][:, 1], color='g', marker='.')
-    plt.scatter(z[2][:, 0], z[2][:, 1], color='b', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
+    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
+    plt.scatter(x2[:, 0], x2[:, 1], color='b', marker='.')
     plt.show()
