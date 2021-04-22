@@ -14,7 +14,7 @@ class GMM:
     def __init__(self, n_components, iterations=100, cov_reg=1e-06):
         """
         :param n_components: 聚类类别数
-        :param max_iter: 最大迭代次数
+        :param iterations: 最大迭代次数
         :param cov_reg: 用于防止协方差矩阵奇异的微小变量
         """
         self.n_components, self.iterations, self.cov_reg = n_components, iterations, cov_reg
