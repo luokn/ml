@@ -7,7 +7,7 @@
 [梯度提升树](./GBDT/gbdt.py) ·
 [高斯混合模型](./GMM/gmm.py) ·
 [隐马尔可夫模型](./HMM/hmm.py) ·
-[K-Means](./Kmeans/kmeans.py)
+[K-Means](./KMeans/kmeans.py)
 
 [K 近邻](./KNN/knn.py) ·
 [线性判别分析](./LDA/lda.py) ·
