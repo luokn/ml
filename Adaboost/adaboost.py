@@ -49,22 +49,22 @@ class AdaBoost:
 
 
 class WeakEstimator:  # 弱分类器, 一阶决策树
-    def __init__(self, feature: int, lr: float):
-        self.feature, self.lr = feature, lr  # 划分特征、学习率
+    def __init__(self, f: int, lr: float):
+        self.f, self.lr = f, lr  # 划分特征、学习率
         self.div, self.sign = None, None  # 划分值、符号
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        x, max_corr = X[:, self.feature], 0
-        for value in np.arange(x.min(), x.max() + self.lr, self.lr):
-            pos_corr = np.sum(np.where(x > value, 1, -1) == Y)
+        x, max_corr = X[:, self.f], 0
+        for v in np.arange(x.min(), x.max() + self.lr, self.lr):
+            pos_corr = np.sum(np.where(x > v, 1, -1) == Y)
             neg_corr = len(x) - pos_corr
             if pos_corr > max_corr:
-                self.div, self.sign, max_corr = value, 1, pos_corr
+                self.div, self.sign, max_corr = v, 1, pos_corr
             elif neg_corr > max_corr:
-                self.div, self.sign, max_corr = value, -1, neg_corr
+                self.div, self.sign, max_corr = v, -1, neg_corr
 
     def __call__(self, X: np.ndarray):
-        return np.where(X[:, self.feature] > self.div, self.sign, -self.sign)
+        return np.where(X[:, self.f] > self.div, self.sign, -self.sign)
 
 
 def load_data():
