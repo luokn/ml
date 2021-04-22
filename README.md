@@ -1,4 +1,4 @@
-## 经典机器学习算法的极简实现
+### 经典机器学习算法的极简实现
 
 [AdaBoost](./Adaboost/adaboost.py) ·
 [条件随机场](./CRF/crf.py) ·
