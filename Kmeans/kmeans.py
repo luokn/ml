@@ -66,11 +66,11 @@ if __name__ == '__main__':
     kmeans.fit(x)
     pred = kmeans(x)
 
-    z0, z1, z2 = x[pred == 0], x[pred == 1], x[pred == 2]
+    x0, x1, x2 = x[pred == 0], x[pred == 1], x[pred == 2]
     plt.subplot(1, 2, 2)
     plt.title('Pred')
-    plt.scatter(z0[:, 0], z0[:, 1], color='r', marker='.')
-    plt.scatter(z1[:, 0], z1[:, 1], color='g', marker='.')
-    plt.scatter(z2[:, 0], z2[:, 1], color='b', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
+    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
+    plt.scatter(x2[:, 0], x2[:, 1], color='b', marker='.')
     plt.scatter(kmeans.centers[:, 0], kmeans.centers[:, 1], color=['r', 'g', 'b'],  marker='*', s=100)
     plt.show()
