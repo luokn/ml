@@ -11,13 +11,13 @@ from scipy.stats import multivariate_normal
 
 
 class GMM:
-    def __init__(self, n_components, max_iter=100, cov_reg=1e-06):
+    def __init__(self, n_components, iterations=100, cov_reg=1e-06):
         """
         :param n_components: 聚类类别数
         :param max_iter: 最大迭代次数
         :param cov_reg: 用于防止协方差矩阵奇异的微小变量
         """
-        self.n_components, self.max_iter, self.cov_reg = n_components, max_iter, cov_reg
+        self.n_components, self.iterations, self.cov_reg = n_components, iterations, cov_reg
         self.weights = np.full(self.n_components, 1 / self.n_components)
         self.means, self.covs = None, None
 
@@ -26,11 +26,11 @@ class GMM:
         self.means = np.array(X[random.sample(range(X.shape[0]), self.n_components)])
         # 初始高斯分布协方差均为单位矩阵
         self.covs = np.stack([np.eye(X.shape[1]) for _ in range(self.n_components)])
-        for i in range(self.max_iter):
+        for _ in range(self.iterations):
             G = self._expect(X)  # E步
             self._maximize(X, G)  # M步
 
-    def predict(self, X: np.ndarray):
+    def __call__(self, X: np.ndarray):
         G = self._expect(X)
         return np.argmax(G, axis=1)
 
@@ -56,27 +56,28 @@ class GMM:
 
 def load_data():
     x = np.stack([
-        np.random.multivariate_normal(mean=[5, 0], cov=[[2, 0], [0, 2]], size=[1000]),
-        np.random.multivariate_normal(mean=[0, 5], cov=[[2, 0], [0, 1]], size=[1000])
+        np.random.multivariate_normal(mean=[4, 0], cov=[[2, 0], [0, 2]], size=[1000]),
+        np.random.multivariate_normal(mean=[0, 4], cov=[[2, 0], [0, 2]], size=[1000])
     ])
     return x
 
 
-def plot_scatter(xys, title):
-    plt.figure(figsize=[8, 8])
-    for xy, color in zip(xys, ['r', 'g', 'b']):
-        plt.scatter(xy[:, 0], xy[:, 1], color=color, marker='.')
-    plt.title(title)
-    plt.show()
-
-
 if __name__ == '__main__':
     x = load_data()
-    plot_scatter(x, 'Real')
+    plt.figure(figsize=[12, 6])
+    plt.subplot(1, 2, 1)
+    plt.title('Real')
+    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
+    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
 
     x = x.reshape(-1, 2)
-    gmm = GMM(2, max_iter=1000)
+    gmm = GMM(2, iterations=1000)
     gmm.fit(x)
+    pred = gmm(x)
 
-    pred = gmm.predict(x)
-    plot_scatter([x[pred == i] for i in [0, 1]], 'Pred')
+    x0, x1 = x[pred == 0], x[pred == 1]
+    plt.subplot(1, 2, 2)
+    plt.title('Pred')
+    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
+    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
+    plt.show()
