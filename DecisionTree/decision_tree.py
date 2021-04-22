@@ -100,4 +100,4 @@ if __name__ == '__main__':
     print(pred)
 
     acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    print(f'Accuracy = {100 * acc:.2f}%')
