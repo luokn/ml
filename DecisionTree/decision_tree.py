@@ -90,7 +90,6 @@ def load_data():
 
 if __name__ == '__main__':
     x, y = load_data()
-
     decision_tree = DecisionTree(rate=0.95)
     decision_tree.fit(x, y)
     pred = decision_tree(x)

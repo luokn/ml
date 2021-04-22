@@ -51,7 +51,6 @@ def train_perceptron(model, x, y, epochs):
 
 if __name__ == '__main__':
     x, y = load_data()
-
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title('Real')
@@ -63,17 +62,17 @@ if __name__ == '__main__':
     x, y = x.reshape(-1, 2), y.flatten()
     perceptron = Perceptron(input_dim=2, lr=1e-4)
     train_perceptron(perceptron, x, y, epochs=500)
-
     pred = perceptron(x)
     acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
-    z = x[pred == -1], x[pred == 1]
+    print(f'Accuracy = {100 * acc:.2f}%')
+
+    x0, x1 = x[pred == -1], x[pred == 1]
     plt.subplot(1, 2, 2)
     plt.title('Pred')
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(z[0][:, 0], z[0][:, 1], color='r', marker='.')
-    plt.scatter(z[1][:, 0], z[1][:, 1], color='g', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
+    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
 
     w = perceptron.weights
     a, b = - w[0] / w[1], - w[2] / w[1]

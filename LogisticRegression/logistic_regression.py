@@ -53,7 +53,6 @@ def train_logistic_regression(model, x, y, epochs, batch_size=32):
 
 if __name__ == '__main__':
     x, y = load_data()
-
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title('Real')
@@ -62,22 +61,20 @@ if __name__ == '__main__':
     plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
     plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
 
-    x = x.reshape(-1, 2)
-    y = y.flatten()
+    x, y = x.reshape(-1, 2), y.flatten()
     logistic_regression = LogisticRegression(2, lr=1e-3)
     train_logistic_regression(logistic_regression, x, y, epochs=500)
-
     pred = logistic_regression(x)
     acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    print(f'Accuracy = {100 * acc:.2f}%')
 
-    z = x[pred == 0], x[pred == 1]
+    x0, x1 = x[pred == 0], x[pred == 1]
     plt.subplot(1, 2, 2)
     plt.title('Pred')
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(z[0][:, 0], z[0][:, 1], color='r', marker='.')
-    plt.scatter(z[1][:, 0], z[1][:, 1], color='g', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
+    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
 
     w = logistic_regression.weights
     a, b = - w[0] / w[1], - w[2] / w[1]

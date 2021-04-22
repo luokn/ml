@@ -54,7 +54,6 @@ def load_data():
 
 if __name__ == '__main__':
     x = load_data()
-
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title('Real')

@@ -59,12 +59,11 @@ def load_data():
 
 if __name__ == "__main__":
     x, y = load_data()
-
     naive_bayes = NaiveBayesClassifier()
     naive_bayes.fit(x, y)
     pred = naive_bayes(x)
     acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    print(f'Accuracy = {100 * acc:.2f}%')
     print(naive_bayes.prior_prob)  # 先验概率
     # [7/17, 10/17]
     print(naive_bayes.cond_prob)  # 条件概率

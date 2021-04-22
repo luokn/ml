@@ -143,22 +143,22 @@ if __name__ == '__main__':
     svm.fit(x, y)
     pred = svm(x)
     acc = np.sum(pred == y) / len(pred)
-    print(f'Acc = {100 * acc:.2f}%')
+    print(f'Accuracy = {100 * acc:.2f}%')
 
-    z = x[pred == -1], x[pred == 1]
+    x0, x1 = x[pred == -1], x[pred == 1]
     plt.subplot(1, 3, 2)
     plt.title('Pred')
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
-    plt.scatter(z[0][:, 0], z[0][:, 1], color='r', marker='.')
-    plt.scatter(z[1][:, 0], z[1][:, 1], color='g', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
+    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
 
-    v = svm.support_vectors
+    sv = svm.support_vectors
     plt.subplot(1, 3, 3)
     plt.title('Support vectors')
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
-    plt.scatter(z[0][:, 0], z[0][:, 1], color='r', marker='.')
-    plt.scatter(z[1][:, 0], z[1][:, 1], color='g', marker='.')
-    plt.scatter(v[:, 0], v[:, 1], color='b', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
+    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
+    plt.scatter(sv[:, 0], sv[:, 1], color='b', marker='.')
     plt.show()
