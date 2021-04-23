@@ -42,8 +42,7 @@ class NaiveBayesClassifier:
 
     @staticmethod
     def _estimate_prob(x, n_categories):  # 使用贝叶斯估计
-        counter = np.bincount(x, minlength=n_categories) + 1
-        return counter / counter.sum()
+        return (np.bincount(x, minlength=n_categories) + 1) / (len(x) + n_categories)
 
 
 def load_data():
