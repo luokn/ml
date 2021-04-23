@@ -32,53 +32,49 @@ class DecisionTree:
         return node  # 如果节点是叶子类型则直接返回该值
 
     def _create_tree(self, X, Y, indices, features):
-        c, rate = self._select_class(X, Y, indices)  # 获得数量最多的类别及其频率
+        category, rate = self._select_class(Y, indices)  # 获得数量最多的类别及其频率
         if len(features) == 0 or rate > self.rate:  # 无特征可分或者满足一定的单一性
-            return c  # 返回最单一的类别
-        f = self._select_feature(X, Y, indices, features)  # 选择香农熵最小的特征
-        trees = {}
-        features_ = features[features != f]  # 除去选择的特征
-        for v in np.unique(X[indices, f]).tolist():  # 为该特征的每一个取值都建立子树
-            indices_ = self._query_indices(X, Y, indices, f, v)
-            trees[v] = self._create_tree(X, Y, indices_, features_)  # 递归构建子决策树
-        return {'feature': f, 'trees': trees}
+            return category  # 返回最单一的类别
+        feature = self._select_feature(X, Y, indices, features)  # 选择香农熵最小的特征
+        sub_trees = {}
+        sub_features = features[features != feature]  # 除去选择的特征
+        for v in np.unique(X[indices, feature]).tolist():  # 为该特征的每一个取值都建立子树
+            sub_indices = indices[X[indices, feature] == v]
+            sub_trees[v] = self._create_tree(X, Y, sub_indices, sub_features)  # 递归构建子决策树
+        return {'feature': feature, 'trees': sub_trees}
 
     @staticmethod
-    def _calc_entropy(X, Y, indices):  # 计算经验熵
+    def _select_class(Y, indices):
+        prob = np.bincount(Y[indices]) / len(indices)  # 计算类别频率
+        category = np.argmax(prob)
+        return category, prob[category]  # 返回出现次数最多的类别，以及其频率
+
+    @staticmethod
+    def _calc_entropy(Y, indices):  # 计算经验熵
         prob = np.bincount(Y[indices]) / len(indices)  # 采用二进制计数法，x必须为正整数向量
         prob = prob[prob != 0]  # 除去0概率
         return np.sum(prob * -np.log(prob))  # 经验熵
-
-    @staticmethod
-    def _query_indices(X, Y, indices, feature, value):
-        return indices[X[indices, feature] == value]
-
-    @staticmethod
-    def _select_class(X, Y, indices):
-        prob = np.bincount(Y[indices]) / len(indices)  # 计算类别频率
-        c = np.argmax(prob)
-        return c, prob[c]  # 返回出现次数最多的类别，以及其频率
 
     @classmethod
     def _calc_cond_entropy(cls, X, Y, indices, feature):  # 计算条件熵
         cond_ent = 0  # 经验条件熵
         for v in np.unique(X[indices, feature]):
-            indices_ = cls._query_indices(X, Y, indices, feature, v)
-            cond_ent += len(indices_) / len(indices) * cls._calc_entropy(X, Y, indices_)
+            sub_indices = indices[X[indices, feature] == v]
+            cond_ent += len(sub_indices) / len(indices) * cls._calc_entropy(Y, sub_indices)
         return cond_ent  # 条件熵
 
     @classmethod
     def _calc_info_gain(cls, X, Y, indices, feature):  # 计算信息增益
-        ent = cls._calc_entropy(X, Y, indices)  # 经验熵
+        ent = cls._calc_entropy(Y, indices)  # 经验熵
         cond_ent = cls._calc_cond_entropy(X, Y, indices, feature)  # 经验条件熵
         return ent - cond_ent  # 信息增益
 
     @classmethod
     def _select_feature(cls, X, Y, indices, features):
         gains = np.array([
-            cls._calc_info_gain(X, Y, indices, f) for f in features
+            cls._calc_info_gain(X, Y, indices, feature) for feature in features
         ])  # 计算features中所有特征的信息增益
-        return features[np.argmax(gains)]  # 返回信息增益最大的特征
+        return features[gains.argmax()]  # 返回信息增益最大的特征
 
 
 def load_data():
