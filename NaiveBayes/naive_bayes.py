@@ -41,8 +41,8 @@ class NaiveBayesClassifier:
         return Y
 
     @staticmethod
-    def _estimate_prob(x, n_classes):  # 使用贝叶斯估计
-        counter = np.bincount(x, minlength=n_classes) + 1
+    def _estimate_prob(x, n_categories):  # 使用贝叶斯估计
+        counter = np.bincount(x, minlength=n_categories) + 1
         return counter / counter.sum()
 
 
@@ -65,10 +65,11 @@ if __name__ == "__main__":
 
     print(naive_bayes.prior_prob)  # 先验概率
     # [7/17, 10/17]
-    print(naive_bayes.cond_prob)  # 条件概率
-    # [4/9, 3/9, 2/9]
-    # [4/9, 3/9, 2/9]
-    # [3/12, 4/12, 5/12]
-    # [2/12, 5/12, 5/12]
+    print(naive_bayes.cond_prob[0])  # 条件概率
+    # [[4/9, 3/9, 2/9]
+    #  [4/9, 3/9, 2/9]]
+    print(naive_bayes.cond_prob[1])  # 条件概率
+    # [[3/12, 4/12, 5/12]
+    #  [2/12, 5/12, 5/12]]
     acc = np.sum(pred == y) / len(pred)
     print(f'Accuracy = {100 * acc:.2f}%')
