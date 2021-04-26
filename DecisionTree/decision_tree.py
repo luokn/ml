@@ -32,7 +32,7 @@ class DecisionTree:
         return node  # 如果节点是叶子类型则直接返回该值
 
     def _create_tree(self, X, Y, indices, features):
-        category, rate = self._select_class(Y, indices)  # 获得数量最多的类别及其频率
+        category, rate = self._select_category(Y, indices)  # 获得数量最多的类别及其频率
         if len(features) == 0 or rate > self.rate:  # 无特征可分或者满足一定的单一性
             return category  # 返回最单一的类别
         feature = self._select_feature(X, Y, indices, features)  # 选择香农熵最小的特征
@@ -44,7 +44,7 @@ class DecisionTree:
         return {'feature': feature, 'trees': sub_trees}
 
     @staticmethod
-    def _select_class(Y, indices):
+    def _select_category(Y, indices):
         prob = np.bincount(Y[indices]) / len(indices)  # 计算类别频率
         category = np.argmax(prob)
         return category, prob[category]  # 返回出现次数最多的类别，以及其频率
