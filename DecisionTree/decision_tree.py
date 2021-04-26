@@ -52,7 +52,7 @@ class DecisionTree:
     @staticmethod
     def _calc_entropy(Y, indices):  # 计算经验熵
         prob = np.bincount(Y[indices]) / len(indices)  # 采用二进制计数法，x必须为正整数向量
-        prob = prob[prob != 0]  # 除去0概率
+        prob = prob[prob.nonzero()]  # 除去0概率
         return np.sum(prob * -np.log(prob))  # 经验熵
 
     @classmethod
