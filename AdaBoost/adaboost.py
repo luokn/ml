@@ -32,7 +32,7 @@ class AdaBoost:
             errors = np.array([
                 np.sum(np.where(pred == Y, 0, weights)) for pred in predictions
             ])  # 计算每一个弱分类器的带权重误差
-            idx = np.argmin(errors).item()  # 选择最小误差
+            idx = np.argmin(errors)  # 选择最小误差
             if errors[idx] < self.eps:  # 误差达到阈值，停止
                 break
             self.estimators.append(estimators[idx])  # 添加弱分类器
@@ -41,11 +41,11 @@ class AdaBoost:
             weights *= exp_res / (weights @ exp_res)  # 更新样本权重
 
     def __call__(self, X: np.ndarray):
-        pred = np.array([
+        predictions = np.array([
             alpha * estimator(X) for alpha, estimator in zip(self.alpha, self.estimators)
         ])
-        pred = np.sum(pred, axis=0)
-        return np.where(pred > 0, 1, -1)
+        predictions = np.sum(predictions, axis=0)
+        return np.where(predictions > 0, 1, -1)
 
 
 class WeakEstimator:  # 弱分类器, 一阶决策树
@@ -83,9 +83,9 @@ if __name__ == '__main__':
     plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
 
     x, y = x.reshape(-1, 2), y.flatten()
-    ada_boost = AdaBoost(5)
-    ada_boost.fit(x, y)
-    pred = ada_boost(x)
+    adaboost = AdaBoost(5)
+    adaboost.fit(x, y)
+    pred = adaboost(x)
     acc = np.sum(pred == y) / len(pred)
     print(f'Accuracy = {100 * acc:.2f}%')
 

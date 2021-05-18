@@ -10,4 +10,12 @@ class LDA:
     """
     Linear Discriminant Analysis(线性判别分析)
     """
-    ...
+
+    def __init__(self):
+        ...
+
+    def fit(self, X: np.ndarray, Y: np.ndarray):
+        ...
+
+    def __call__(self, X: np.ndarray):
+        ...
