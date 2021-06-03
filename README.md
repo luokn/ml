@@ -1,7 +1,5 @@
 <h2 align="center">经典机器学习算法的极简实现</h2>
 
-<hr/>
-
 [<img src="https://img.shields.io/badge/AdaBoost-PASS-30BB34?style=flat-square&logo=Numpy&logoColor=white"/>](AdaBoost/adaboost.py)
 [<img src="https://img.shields.io/badge/Decision_Tree-PASS-30BB34?style=flat-square&logo=Numpy&logoColor=white"/>](DecisionTree/decision_tree.py)
 [<img src="https://img.shields.io/badge/EM-PASS-30BB34?style=flat-square&logo=Numpy&logoColor=white"/>](EM/em.py)
