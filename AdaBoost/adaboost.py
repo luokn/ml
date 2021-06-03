@@ -14,76 +14,71 @@ class AdaBoost:
 
     def __init__(self, n_estimators: int, lr=0.01, eps=1e-5):
         """
-        :param n_estimators: 弱分类器个数
-        :param eps: 误差阈值
+        Args:
+            n_estimators (int): 弱分类器个数
+            lr (float, optional): 学习率. Defaults to 0.01.
+            eps ([type], optional): 误差下限. Defaults to 1e-5.
         """
         self.n_estimators, self.lr, self.eps = n_estimators, lr, eps
-        self.estimators = []
         self.alpha = np.empty([n_estimators])  # 弱分类器权重
+        self.estimators = []  # 弱分类器
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         weights = np.full([len(X)], 1 / len(X))  # 样本权重
-        estimators = [WeakEstimator(f, self.lr) for f in range(X.shape[1])]  # 所有特征的弱分类器
-        predictions = np.zeros([len(estimators), len(Y)])  # 弱分类器输出
-        for i, estimator in enumerate(estimators):
-            estimator.fit(X, Y)  # 逐特征训练弱分类器
-            predictions[i] = estimator(X)  # 记录所有弱分类器输出
-        for k in range(self.n_estimators):
-            errors = np.array([
-                np.sum(np.where(pred == Y, 0, weights)) for pred in predictions
-            ])  # 计算每一个弱分类器的带权重误差
-            idx = np.argmin(errors)  # 选择最小误差
-            if errors[idx] < self.eps:  # 误差达到阈值，停止
+        for m in range(self.n_estimators):
+            estimator = WeakEstimator(lr=self.lr)
+            error = estimator.fit(X, Y, weights)  # 带权重训练弱分类器
+            if error < self.eps:  # 误差达到阈值，停止
                 break
-            self.estimators.append(estimators[idx])  # 添加弱分类器
-            self.alpha[k] = .5 * np.log((1 - errors[idx]) / errors[idx])  # 更新弱分类器权重
-            exp_res = np.exp(-self.alpha[k] * Y * predictions[idx])
-            weights *= exp_res / (weights @ exp_res)  # 更新样本权重
+            self.alpha[m] = np.log((1 - error) / error) / 2  # 更新弱分类器权重
+            weights *= np.exp(-self.alpha[m] * Y * estimator(X))  # 更新样本权重
+            weights /= np.sum(weights)  # 除以规范化因子
+            self.estimators += [estimator]  # 添加弱分类器
 
     def __call__(self, X: np.ndarray):
-        predictions = np.array([
-            alpha * estimator(X) for alpha, estimator in zip(self.alpha, self.estimators)
-        ])
-        predictions = np.sum(predictions, axis=0)
-        return np.where(predictions > 0, 1, -1)
+        pred = sum((alpha * estimator(X) for alpha, estimator in zip(self.alpha, self.estimators)))
+        return np.where(pred > 0, 1, -1)
 
 
 class WeakEstimator:  # 弱分类器, 一阶决策树
-    def __init__(self, f: int, lr: float):
-        self.f, self.lr = f, lr  # 划分特征、学习率
-        self.div, self.sign = None, None  # 划分值、符号
+    def __init__(self, lr: float):
+        self.lr = lr
+        # 划分特征、划分阈值，符号{-1，1}
+        self.feature, self.threshold, self.sign = None, None, None
 
-    def fit(self, X: np.ndarray, Y: np.ndarray):
-        x, max_corr = X[:, self.f], 0
-        for v in np.arange(x.min(), x.max() + self.lr, self.lr):
-            pos_corr = np.sum(np.where(x > v, 1, -1) == Y)
-            neg_corr = len(x) - pos_corr
-            if pos_corr > max_corr:
-                self.div, self.sign, max_corr = v, 1, pos_corr
-            elif neg_corr > max_corr:
-                self.div, self.sign, max_corr = v, -1, neg_corr
+    def fit(self, X: np.ndarray, Y: np.ndarray, weights: np.ndarray):
+        error = float('inf')
+        for feature, x in enumerate(X.T):
+            for threshold in np.arange(np.min(x) - self.lr, np.max(x) + self.lr, self.lr):
+                for sign in [1, -1]:
+                    e = np.sum(weights[(x > threshold) ^ (Y == sign)])
+                    if e < error:
+                        self.feature, self.threshold, self.sign, error = feature, threshold, sign, e
+        return error
 
     def __call__(self, X: np.ndarray):
-        return np.where(X[:, self.f] > self.div, self.sign, -self.sign)
+        return np.where(X[:, self.feature] > self.threshold, self.sign, -self.sign)
 
 
 def load_data():
-    x = np.stack([np.random.randn(200, 2) + np.array([-1, 0]),
-                  np.random.randn(200, 2) + np.array([1, -1])])
-    y = np.stack([np.full([200], -1), np.full([200], 1)])
+    x = np.stack([
+        np.random.randn(500, 2) + np.array([2, 0]),
+        np.random.randn(500, 2) + np.array([0, 2])
+    ])
+    y = np.stack([np.full([500], -1), np.full([500], 1)])
     return x, y
 
 
 if __name__ == '__main__':
     x, y = load_data()
-    plt.figure(figsize=[10, 5])
+    plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title('Real')
     plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
     plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
 
     x, y = x.reshape(-1, 2), y.flatten()
-    adaboost = AdaBoost(5)
+    adaboost = AdaBoost(50)
     adaboost.fit(x, y)
     pred = adaboost(x)
     acc = np.sum(pred == y) / len(pred)
