@@ -3,19 +3,24 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import matplotlib.pyplot as plt
 import random
 
 import numpy as np
+from matplotlib import pyplot as plt
 from scipy.stats import multivariate_normal
 
 
 class GMM:
-    def __init__(self, n_components, iterations=100, cov_reg=1e-06):
+    """
+    Gaussian mixture model(高斯混合模型)
+    """
+
+    def __init__(self, n_components: int, iterations=100, cov_reg=1e-06):
         """
-        :param n_components: 聚类类别数
-        :param iterations: 最大迭代次数
-        :param cov_reg: 用于防止协方差矩阵奇异的微小变量
+        Args:
+            n_components (int): 聚类类别数
+            iterations (int, optional): 迭代次数. Defaults to 100.
+            cov_reg ([type], optional): 防止协方差矩阵奇异的微小变量. Defaults to 1e-06.
         """
         self.n_components, self.iterations, self.cov_reg = n_components, iterations, cov_reg
         self.weights = np.full(self.n_components, 1 / self.n_components)
