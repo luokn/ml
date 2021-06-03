@@ -3,8 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 class SVM:
@@ -14,10 +14,11 @@ class SVM:
 
     def __init__(self, C=1.0, tol=1e-3, iterations=100, kernel='linear', **kwargs):
         """
-        :param C: 惩罚因子
-        :param tol: 绝对误差限
-        :param max_iter: 最大迭代次数
-        :param kernel: 核函数
+        Args:
+            C (float, optional): 惩罚因子. Defaults to 1.0.
+            tol ([type], optional): 绝对误差限. Defaults to 1e-3.
+            iterations (int, optional): 最大迭代次数. Defaults to 100.
+            kernel (str, optional): 核函数. Defaults to 'linear'.
         """
         self.C, self.tol, self.iterations = C, tol, iterations
         if kernel == 'linear':
@@ -27,10 +28,10 @@ class SVM:
         if kernel == 'rbf':
             self.K = RBFKernel(kwargs['sigma'])  # 径向基核函数
         self.alpha, self.b = None, .0
-        self._X, self._Y = None, None
+        self.X, self.Y = None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        self._X, self._Y = X, Y
+        self.X, self.Y = X, Y
         self.alpha = np.ones([len(X)], dtype=np.float)  # 拉格朗日乘子
         for _ in range(self.iterations):
             E = np.array([self._calc_error(i) for i in range(len(X))])  # 此次迭代缓存的误差
@@ -84,16 +85,16 @@ class SVM:
 
     @property
     def support_vectors(self):  # 支持向量
-        return self._X[self.alpha > 0]
+        return self.X[self.alpha > 0]
 
     def _g(self, x):  # g(x) =\sum_{i=0}^N alpha_i y_i \kappa(x_i, x)
-        return np.sum(self.alpha * self._Y * self.K(self._X, x)) + self.b
+        return np.sum(self.alpha * self.Y * self.K(self.X, x)) + self.b
 
     def _calc_error(self, i):  # E_i = g(x_i) - y_i
-        return self._g(self._X[i]) - self._Y[i]
+        return self._g(self.X[i]) - self.Y[i]
 
     def _satisfy_kkt(self, i):  # 是否满足KKT条件
-        gi, yi = self._g(self._X[i]), self._Y[i]
+        gi, yi = self._g(self.X[i]), self.Y[i]
         if np.abs(self.alpha[i]) < self.tol:
             return gi * yi >= 1
         if np.abs(self.alpha[i]) > self.C - self.tol:

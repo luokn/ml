@@ -5,8 +5,8 @@
 
 import random
 
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 class KMeans:
@@ -16,9 +16,10 @@ class KMeans:
 
     def __init__(self, k: int, eps=1e-3, iterations=100):
         """
-        :param K: 聚类类别数
-        :param eps: 中心点最小更新量
-        :param iterations: 迭代最大次数
+        Args:
+            k (int): 聚类类别数
+            eps ([type], optional): 中心点最小更新量. Defaults to 1e-3.
+            iterations (int, optional): 迭代最大次数. Defaults to 100.
         """
         self.k, self.eps, self.iterations = k, eps, iterations
         self.centers = None  # 中心点
@@ -28,11 +29,11 @@ class KMeans:
         for _ in range(self.iterations):  # 达到最大迭代次数iterations退出迭代
             Y = self.__call__(X)  # 更新节点类别
             means = np.empty_like(self.centers)  # 各类别点的均值
-            for k in range(self.k):
-                if np.any(Y == k):  # 存在元素属于类别i
-                    means[k] = np.mean(X[Y == k], axis=0)  # 计算类别i所有点的均值
+            for i in range(self.k):
+                if np.any(Y == i):  # 存在元素属于类别i
+                    means[i] = np.mean(X[Y == i], axis=0)  # 计算类别i所有点的均值
                 else:  # 不存在任何元素属于类别i
-                    means[k] = X[np.random.randint(0, len(X))]  # 随机选择一个点作为类别i的均值
+                    means[i] = X[np.random.randint(0, len(X))]  # 随机选择一个点作为类别i的均值
             # 更新中心点
             if np.max(np.abs(self.centers - means)) < self.eps:  # 中心点最大更新值小于eps
                 break  # 退出迭代

@@ -3,8 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 class Perceptron:
@@ -14,11 +14,12 @@ class Perceptron:
 
     def __init__(self, input_dim: int, lr: float):
         """
-        :param input_dim: 输入特征维度
-        :param lr: 学习率
+        Args:
+            input_dim (int): 输入特征维度
+            lr (float): 学习率
         """
-        self.weights = np.random.randn(input_dim + 1)  # 权重
         self.input_dim, self.lr = input_dim, lr
+        self.weights = np.random.randn(input_dim + 1)  # 权重
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         for x, y in zip(self._pad(X), Y):

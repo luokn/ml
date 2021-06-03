@@ -3,8 +3,8 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 class LogisticRegression:
@@ -13,6 +13,11 @@ class LogisticRegression:
     """
 
     def __init__(self, input_dim: int, lr: float):
+        """
+        Args:
+            input_dim (int):输入维度
+            lr (float): 学习率
+        """
         self.weights = np.random.randn(input_dim + 1)  # 随机初始化参数
         self.lr = lr  # 学习率
 

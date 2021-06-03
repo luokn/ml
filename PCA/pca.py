@@ -3,18 +3,19 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 class PCA:
     """
-    Principal Components Analysis(主成分分析)
+    Principal Components Analysis(主成因分析)
     """
 
     def __init__(self, k: int):
         """
-        :param k: 保留的主成因个数
+        Args:
+            k (int): 主成因个数
         """
         self.k = k
 
