@@ -12,37 +12,30 @@ class NaiveBayesClassifier:
     """
 
     def __init__(self):
-        self.x_categories, self.y_categories = None, None
         self.prior_prob, self.cond_prob = None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        self.x_categories, self.y_categories = [len(np.unique(x)) for x in X.T], len(np.unique(Y))
-        # 先验概率, prior_prob[i] = P(Y = i)，表示所有标签类别取值概率
-        self.prior_prob = np.empty([self.y_categories])
-        # 条件概率, cond_prob[k][i,j] = P(X_i = a_{ij} | Y = k)，表示类别为K的条件下i特征取a_{ij}的概率
-        self.cond_prob = [np.empty([X.shape[1], c]) for c in self.x_categories]
-        # 计算先验概率
-        self.prior_prob = self._estimate_prob(Y, self.y_categories)  # 频率作为概率(贝叶斯估计)
-        # 计算条件概率
-        for i in range(self.y_categories):
-            x = X[Y == i]  # 类别i的所有数据
-            for f, c in enumerate(self.x_categories):  # 第f个特征有f_classes个类别
-                # 类别为i时，f特征所有取值的条件概率(贝叶斯估计)
-                self.cond_prob[i][f] = self._estimate_prob(x[:, f], c)
+        x_categories, y_categories = [len(np.unique(x)) for x in X.T], len(np.unique(Y))
+        # 先验概率, prior_prob[i] = P(Y = i)，标签类别的取值概率
+        self.prior_prob = self._estimate_prob(Y, y_categories)
+        # 条件概率, cond_prob[k][i,j] = P(X_i = a_{ij} | Y = k)，标签类别为k的条件下i特征取a_{ij}的概率
+        self.cond_prob = [np.zeros([X.shape[1], n]) for n in x_categories]
+        for k in range(y_categories):
+            for i, n in enumerate(x_categories):  # 第i个特征有n_i个类别
+                self.cond_prob[k][i] = self._estimate_prob(X[Y == k, i], n)  # 类别为k时，i特征所有取值的概率
 
     def __call__(self, X: np.ndarray):
         Y = np.zeros([len(X)], dtype=int)
         for i, x in enumerate(X):
-            prob = np.zeros([self.y_categories])  # 每一个类别的概率
-            for c in range(self.y_categories):  # 计算x为类别c的概率
-                prob[c] = np.log(self.prior_prob[c])  # 先验概率(使用对数加法替代乘法避免浮点下溢)
-                prob[c] += np.log(self.cond_prob[c][:, x]).sum()  # 连乘条件概率
-            Y[i] = prob.argmax()
+            prob = np.log(self.prior_prob) + np.array([
+                np.sum(np.log(cond_prob[range(len(x)), x]))for cond_prob in self.cond_prob
+            ])  # 先验概率的对数,加上条件概率的对数
+            Y[i] = np.argmax(prob)
         return Y
 
     @staticmethod
-    def _estimate_prob(x, n_categories):  # 使用贝叶斯估计
-        return (np.bincount(x, minlength=n_categories) + 1) / (len(x) + n_categories)
+    def _estimate_prob(x: np.ndarray, n: int):
+        return (np.bincount(x, minlength=n) + 1) / (len(x) + n)  # 使用贝叶斯估计
 
 
 def load_data():
