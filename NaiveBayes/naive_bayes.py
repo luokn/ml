@@ -28,7 +28,7 @@ class NaiveBayesClassifier:
         Y = np.zeros([len(X)], dtype=int)
         for i, x in enumerate(X):
             prob = np.log(self.prior_prob) + np.array([
-                np.sum(np.log(cond_prob[range(len(x)), x]))for cond_prob in self.cond_prob
+                np.sum(np.log(cond_prob[range(len(x)), x])) for cond_prob in self.cond_prob
             ])  # 先验概率的对数,加上条件概率的对数
             Y[i] = np.argmax(prob)
         return Y
