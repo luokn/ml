@@ -15,7 +15,8 @@ class NaiveBayesClassifier:
         self.prior_prob, self.cond_prob = None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        x_categories, y_categories = [len(np.unique(x)) for x in X.T], len(np.unique(Y))
+        # 计算X的各个特征与标签Y有多少类别
+        x_categories, y_categories = np.max(X, axis=0) + 1, np.max(Y) + 1
         # 先验概率, prior_prob[i] = P(Y = i)，标签类别的取值概率
         self.prior_prob = self._estimate_prob(Y, y_categories)
         # 条件概率, cond_prob[k][i,j] = P(X_i = a_{ij} | Y = k)，标签类别为k的条件下i特征取a_{ij}的概率
