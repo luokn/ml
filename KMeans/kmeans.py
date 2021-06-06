@@ -7,6 +7,7 @@ import random
 
 import numpy as np
 from matplotlib import pyplot as plt
+from numpy import linalg as LA
 
 
 class KMeans:
@@ -28,22 +29,16 @@ class KMeans:
         self.centers = X[random.sample(range(len(X)), self.k)]  # 随机选择k个点作为中心点
         for _ in range(self.iterations):  # 达到最大迭代次数iterations退出迭代
             Y = self.__call__(X)  # 更新节点类别
-            means = np.empty_like(self.centers)  # 各类别点的均值
-            for i in range(self.k):
-                if np.any(Y == i):  # 存在元素属于类别i
-                    means[i] = np.mean(X[Y == i], axis=0)  # 计算类别i所有点的均值
-                else:  # 不存在任何元素属于类别i
-                    means[i] = X[np.random.randint(0, len(X))]  # 随机选择一个点作为类别i的均值
-            # 更新中心点
+            means = np.stack([
+                # 存在元素属于类别i则计算类别i所有点的均值，否则随机选择一个点作为类别i的均值
+                np.mean(X[Y == i], axis=0) if np.any(Y == i) else random.choice(X) for i in range(self.k)
+            ])  # 各类别的均值
             if np.max(np.abs(self.centers - means)) < self.eps:  # 中心点最大更新值小于eps
                 break  # 退出迭代
             self.centers = means  # 将更新后的均值作为各类别中心点
 
     def __call__(self, X: np.ndarray):
-        Y = np.empty([len(X)], dtype=int)  # 类别
-        for i, x in enumerate(X):
-            Y[i] = np.linalg.norm(self.centers - x, axis=1).argmin()  # 每一点类别为最近的中心点类别
-        return Y
+        return np.array([np.argmin(LA.norm(self.centers - x, axis=1)) for x in X])  # 每一点类别为最近的中心点类别
 
 
 def load_data():
