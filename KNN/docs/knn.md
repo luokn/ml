@@ -102,7 +102,7 @@ plt.show()
 
 结果如下：
 
-![KNN](assets/knn.png)
+![KNN](../assets/knn.png)
 
 精度为93%，可以看出KNN对于这种比较简单的分类还有不错的效果的。
 
