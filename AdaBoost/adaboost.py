@@ -20,23 +20,22 @@ class AdaBoost:
             eps ([type], optional): 误差下限. Defaults to 1e-5.
         """
         self.n_estimators, self.lr, self.eps = n_estimators, lr, eps
-        self.alpha = np.empty([n_estimators])  # 弱分类器权重
         self.estimators = []  # 弱分类器
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         weights = np.full([len(X)], 1 / len(X))  # 样本权重
-        for m in range(self.n_estimators):
+        for _ in range(self.n_estimators):
             estimator = WeakEstimator(lr=self.lr)
             error = estimator.fit(X, Y, weights)  # 带权重训练弱分类器
             if error < self.eps:  # 误差达到下限，提前停止迭代
                 break
-            self.alpha[m] = np.log((1 - error) / error) / 2  # 更新弱分类器权重
-            weights *= np.exp(-self.alpha[m] * Y * estimator(X))  # 更新样本权重
+            alpha = np.log((1 - error) / error) / 2  # 更新弱分类器权重
+            weights *= np.exp(-alpha * Y * estimator(X))  # 更新样本权重
             weights /= np.sum(weights)  # 除以规范化因子
-            self.estimators += [estimator]  # 添加此弱分类器
+            self.estimators += [(alpha, estimator)]  # 添加此弱分类器
 
     def __call__(self, X: np.ndarray):
-        pred = sum((alpha * estimator(X) for alpha, estimator in zip(self.alpha, self.estimators)))
+        pred = sum((alpha * estimator(X) for alpha, estimator in self.estimators))
         return np.where(pred > 0, 1, -1)
 
 
@@ -51,7 +50,7 @@ class WeakEstimator:  # 弱分类器, 一阶决策树
         for feature, x in enumerate(X.T):
             for threshold in np.arange(np.min(x) - self.lr, np.max(x) + self.lr, self.lr):
                 for sign in [1, -1]:
-                    e = np.sum(weights[(x > threshold) ^ (Y == sign)])  # 取分类错误的样本权重求和
+                    e = np.sum(weights[np.where(x > threshold, sign, -sign) != Y])  # 取分类错误的样本权重求和
                     if e < error:
                         self.feature, self.threshold, self.sign, error = feature, threshold, sign, e
         return error
