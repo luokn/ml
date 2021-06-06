@@ -3,8 +3,9 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
+from numpy import linalg as LA
 
 
 class KNN:
@@ -25,9 +26,9 @@ class KNN:
     def __call__(self, X: np.ndarray):
         Y = np.zeros([len(X)], dtype=int)  # X对应的类别
         for i, x in enumerate(X):
-            dist = np.linalg.norm(self.X - x, axis=1)  # 计算x与所有已知类别点的距离
-            topk = np.argsort(dist)[:self.k]  # 取距离最近的k个点对应的索引
-            Y[i] = np.argmax(np.bincount(self.Y[topk]))  # k近邻次数最多的类别将作为x的类别
+            dist = LA.norm(self.X - x, axis=1)  # 计算x与所有已知类别点的距离
+            topk = np.argsort(dist)[:self.k]  # 取距离最小的k个点对应的索引
+            Y[i] = np.bincount(self.Y[topk]).argmax()  # 取近邻点最多的类别作为x的类别
         return Y
 
 
