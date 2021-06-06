@@ -22,8 +22,8 @@ class PCA:
     def __call__(self, X: np.ndarray):
         X_norm = X - X.mean(axis=0)  # 去中心化
         L, U = np.linalg.eig(X_norm.T @ X_norm)  # 对协方差矩阵进行特征值分解
-        topk = np.argsort(L)[::-1][:self.k]  # 找出特征值中前K大特征对应的索引
-        return X_norm @ U[:, topk]  # 将去中心化矩阵乘以前K大特征对应的特征向量
+        topk = np.argsort(L)[::-1][:self.k]  # 找出前K大特征值对应的索引
+        return X_norm @ U[:, topk]  # 将去中心化的X乘以前K大特征值对应的特征向量
 
 
 def load_data():
