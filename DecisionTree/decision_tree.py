@@ -45,21 +45,21 @@ class DecisionTree:
 
     @staticmethod
     def _select_category(Y, indices):
-        prob = np.bincount(Y[indices]) / len(indices)  # 计算类别频率
-        category = np.argmax(prob)
-        return category, prob[category]  # 返回出现次数最多的类别，以及其频率
+        counter = np.bincount(Y[indices])  # 计算类别频次
+        category = np.argmax(counter)
+        return category, counter[category] / len(indices)  # 返回出现次数最多的类别，以及其频率
 
     @staticmethod
     def _calc_entropy(Y, indices):  # 计算经验熵
-        prob = np.bincount(Y[indices]) / len(indices)  # 采用二进制计数法，x必须为正整数向量
+        prob = np.bincount(Y[indices]) / len(indices)
         prob = prob[prob.nonzero()]  # 除去0概率
-        return np.sum(prob * -np.log(prob))  # 经验熵
+        return np.sum(-prob * np.log(prob))  # 经验熵
 
     @classmethod
     def _calc_cond_entropy(cls, X, Y, indices, feature):  # 计算条件熵
         cond_ent = 0  # 经验条件熵
-        for v in np.unique(X[indices, feature]):
-            sub_indices = indices[X[indices, feature] == v]
+        for value in np.unique(X[indices, feature]):
+            sub_indices = indices[X[indices, feature] == value]
             cond_ent += len(sub_indices) / len(indices) * cls._calc_entropy(Y, sub_indices)
         return cond_ent  # 条件熵
 
