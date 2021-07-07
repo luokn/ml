@@ -12,15 +12,16 @@ class SVM:
     Support Vector Machines(支持向量机)
     """
 
-    def __init__(self, C=1.0, tol=1e-3, iterations=100, kernel='linear', **kwargs):
+    def __init__(self, C=1.0, kernel='linear', iterations=100, tol=1e-3, **kwargs):
         """
         Args:
             C (float, optional): 惩罚因子. Defaults to 1.0.
-            tol ([type], optional): 绝对误差限. Defaults to 1e-3.
-            iterations (int, optional): 最大迭代次数. Defaults to 100.
             kernel (str, optional): 核函数. Defaults to 'linear'.
+            iterations (int, optional): 最大迭代次数. Defaults to 100.
+            tol (float, optional): 绝对误差限. Defaults to 1e-3.
         """
-        self.C, self.tol, self.iterations = C, tol, iterations
+        assert kernel in ['linear', 'poly', 'rbf']
+        self.C, self.iterations, self.tol = C, iterations, tol
         if kernel == 'linear':
             self.K = LinearKernel()  # 线性核函数
         if kernel == 'poly':
