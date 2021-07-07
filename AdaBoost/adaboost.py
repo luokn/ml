@@ -17,7 +17,7 @@ class AdaBoost:
         Args:
             n_estimators (int): 弱分类器个数
             lr (float, optional): 学习率. Defaults to 0.01.
-            eps ([type], optional): 误差下限. Defaults to 1e-5.
+            eps (float, optional): 误差下限. Defaults to 1e-5.
         """
         self.n_estimators, self.lr, self.eps = n_estimators, lr, eps
         self.estimators = []  # 弱分类器

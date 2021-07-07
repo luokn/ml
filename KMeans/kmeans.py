@@ -15,12 +15,12 @@ class KMeans:
     K-means clustering(K均值聚类)
     """
 
-    def __init__(self, k: int, eps=1e-3, iterations=100):
+    def __init__(self, k: int, iterations=100, eps=1e-3):
         """
         Args:
             k (int): 聚类类别数
-            eps ([type], optional): 中心点最小更新量. Defaults to 1e-3.
             iterations (int, optional): 迭代最大次数. Defaults to 100.
+            eps (int, optional): 中心点最小更新量. Defaults to 1e-3.
         """
         self.k, self.eps, self.iterations = k, eps, iterations
         self.centers = None  # 中心点
@@ -68,5 +68,5 @@ if __name__ == '__main__':
     plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
     plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
     plt.scatter(x2[:, 0], x2[:, 1], color='b', marker='.')
-    plt.scatter(kmeans.centers[:, 0], kmeans.centers[:, 1], color=['r', 'g', 'b'],  marker='*', s=100)
+    plt.scatter(kmeans.centers[:, 0], kmeans.centers[:, 1], color=['r', 'g', 'b'], marker='*', s=100)
     plt.show()
