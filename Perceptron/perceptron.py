@@ -22,18 +22,18 @@ class Perceptron:
         self.weights = np.random.randn(input_dim + 1)  # 权重
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
-        for x, y in zip(self._pad(X), Y):
+        for x, y in zip(pad(X), Y):
             if y * (x @ self.weights) <= 0:  # 分类错误, y 与 wx + b 符号不同
                 neg_grad = x * y  # 计算weights的负梯度
                 self.weights += self.lr * neg_grad  # 沿负梯度方向更新weights
 
     def __call__(self, X: np.ndarray):
-        pred = self._pad(X) @ self.weights
+        pred = pad(X) @ self.weights
         return np.where(pred > 0, 1, -1)
 
-    @staticmethod
-    def _pad(x):
-        return np.concatenate([x, np.ones([len(x), 1])], axis=1)
+
+def pad(x):
+    return np.concatenate([x, np.ones([len(x), 1])], axis=1)
 
 
 def load_data():
