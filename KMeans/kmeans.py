@@ -28,7 +28,7 @@ class KMeans:
     def fit(self, X: np.ndarray):
         self.centers = X[random.sample(range(len(X)), self.k)]  # 随机选择k个点作为中心点
         for _ in range(self.iterations):  # 达到最大迭代次数iterations退出迭代
-            Y = self.__call__(X)  # 更新节点类别
+            Y = self(X)  # 更新节点类别
             means = np.stack([
                 # 存在元素属于类别i则计算类别i所有点的均值，否则随机选择一个点作为类别i的均值
                 np.mean(X[Y == i], axis=0) if np.any(Y == i) else random.choice(X) for i in range(self.k)
