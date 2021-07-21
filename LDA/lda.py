@@ -4,8 +4,8 @@
 # @Email : olooook@outlook.com
 
 import numpy as np
-from numpy import linalg as LA
 from matplotlib import pyplot as plt
+from numpy import linalg as LA
 
 
 class LDA:
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     x, y = load_data()
     plt.figure(figsize=[18, 6])
     plt.subplot(1, 3, 1)
-    plt.title('Real')
+    plt.title('Truth')
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')

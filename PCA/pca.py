@@ -42,7 +42,7 @@ if __name__ == '__main__':
     x0, x1, x2 = x.reshape(3, -1, 2)
     plt.figure(figsize=[15, 5])
     plt.subplot(1, 3, 1)
-    plt.title('Real')
+    plt.title('Truth')
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')

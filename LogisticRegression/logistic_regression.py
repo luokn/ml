@@ -59,7 +59,7 @@ if __name__ == '__main__':
     x, y = load_data()
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
-    plt.title('Real')
+    plt.title('Truth')
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     x0, x1 = x[pred == 0], x[pred == 1]
     plt.subplot(1, 2, 2)
-    plt.title('Pred')
+    plt.title('Prediction')
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')

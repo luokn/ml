@@ -33,7 +33,7 @@ class SVM:
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         self.X, self.Y = X, Y
-        self.alpha = np.ones([len(X)], dtype=np.float)  # 拉格朗日乘子
+        self.alpha = np.ones([len(X)])  # 拉格朗日乘子
         for _ in range(self.iterations):
             E = np.array([self._calc_error(i) for i in range(len(X))])  # 此次迭代缓存的误差
             for i1 in range(len(X)):  # 外层循环，寻找第一个alpha
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     x, y = load_data()
     plt.figure(figsize=[18, 6])
     plt.subplot(1, 3, 1)
-    plt.title('Real')
+    plt.title('Truth')
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
     plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     x0, x1 = x[pred == -1], x[pred == 1]
     plt.subplot(1, 3, 2)
-    plt.title('Pred')
+    plt.title('Prediction')
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
     plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
