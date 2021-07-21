@@ -18,8 +18,8 @@ class LogisticRegression:
             input_dim (int):输入维度
             lr (float): 学习率
         """
-        self.weights = np.random.randn(input_dim + 1)  # 随机初始化参数
         self.lr = lr  # 学习率
+        self.weights = np.random.randn(input_dim + 1)  # 随机初始化参数
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
         X_pad = pad(X)  # 为X填充1作为偏置
