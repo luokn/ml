@@ -1,4 +1,4 @@
-<h2 align="center">经典机器学习算法的极简实现</h2>
+<h1 align="center">经典机器学习算法的极简实现</h1>
 
 [<img src="https://img.shields.io/badge/AdaBoost-Code-30BB34?style=for-the-badge&logo=Numpy&logoColor=white"/>](AdaBoost/adaboost.py)
 [<img src="https://img.shields.io/badge/Decision_Tree-Code-30BB34?style=for-the-badge&logo=Numpy&logoColor=white"/>](DecisionTree/decision_tree.py)
