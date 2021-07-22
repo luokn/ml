@@ -29,9 +29,9 @@ class LDA:
             Mi = np.mean(Xi, axis=0)
             S_W += (Xi - Mi).T @ (Xi - Mi)
             S_B += len(Xi) * (Mi - M).reshape(-1, 1) @ (Mi - M).reshape(1, -1)
-        L, U = LA.eig(LA.inv(S_W) @ S_B)  # 计算 S_W^{-1} S_B 的特征值与特征向量
+        L, V = LA.eig(LA.inv(S_W) @ S_B)  # 计算 S_W^{-1} S_B 的特征值与特征向量
         topk = np.argsort(L)[::-1][:self.k]  # 按照特征值降序排列，取前K大特征值
-        self.W = U[:, topk]  # 选择topk对应的特征向量
+        self.W = V[:, topk]  # 选择topk对应的特征向量
 
     def __call__(self, X: np.ndarray):
         return X @ self.W
