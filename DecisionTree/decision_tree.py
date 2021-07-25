@@ -3,6 +3,7 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
+
 import numpy as np
 
 
@@ -11,7 +12,7 @@ class DecisionTree:
     Decision tree classifier(决策树分类器，ID3生成算法)
     """
 
-    def __init__(self, rate: float = 0.95):
+    def __init__(self, rate: float = .95):
         self.rate, self.tree = rate, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
