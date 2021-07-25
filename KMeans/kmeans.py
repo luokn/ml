@@ -28,12 +28,12 @@ class KMeans:
     def fit(self, X: np.ndarray):
         self.centers = X[random.sample(range(len(X)), self.k)]  # 随机选择k个点作为中心点
         for _ in range(self.iterations):  # 达到最大迭代次数iterations退出迭代
-            Y = self(X)  # 更新节点类别
+            pred = self(X)  # 更新节点类别
             means = np.stack([
                 # 存在元素属于类别i则计算类别i所有点的均值，否则随机选择一个点作为类别i的均值
-                np.mean(X[Y == i], axis=0) if np.any(Y == i) else random.choice(X) for i in range(self.k)
+                np.mean(X[pred == i], axis=0) if np.any(pred == i) else random.choice(X) for i in range(self.k)
             ])  # 各类别的均值
-            if np.max(np.abs(self.centers - means)) < self.eps:  # 中心点最大更新值小于eps
+            if np.abs(self.centers - means).max() < self.eps:  # 中心点最大更新值小于eps
                 break  # 退出迭代
             self.centers = means  # 将更新后的均值作为各类别中心点
 
