@@ -28,9 +28,9 @@ class NaiveBayesClassifier:
     def __call__(self, X: np.ndarray):
         Y = np.zeros([len(X)], dtype=int)
         for i, x in enumerate(X):
-            prob = np.log(self.prior_prob) + np.array([
-                np.sum(np.log(cond_prob[range(len(x)), x])) for cond_prob in self.cond_prob
-            ])  # 先验概率的对数,加上条件概率的对数
+            prob = np.log(self.prior_prob) + np.array(
+                [np.sum(np.log(cond_prob[range(len(x)), x])) for cond_prob in self.cond_prob]
+            )  # 先验概率的对数,加上条件概率的对数
             Y[i] = np.argmax(prob)
         return Y
 
@@ -41,12 +41,27 @@ class NaiveBayesClassifier:
 
 def load_data():
     # 参照李航《统计学习方法（第一版）》第四章例4.1
-    x = np.array([[0, 0], [0, 1], [0, 1], [0, 0], [0, 0],
-                  [1, 0], [1, 1], [1, 1], [1, 2], [1, 2],
-                  [2, 2], [2, 1], [2, 1], [2, 2], [2, 2]], dtype=int)
-    y = np.array([0, 0, 1, 1, 0,
-                  0, 0, 1, 1, 1,
-                  1, 1, 1, 1, 0], dtype=int)
+    x = np.array(
+        [
+            [0, 0],
+            [0, 1],
+            [0, 1],
+            [0, 0],
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [1, 1],
+            [1, 2],
+            [1, 2],
+            [2, 2],
+            [2, 1],
+            [2, 1],
+            [2, 2],
+            [2, 2],
+        ],
+        dtype=int,
+    )
+    y = np.array([0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0], dtype=int)
     return x, y
 
 
@@ -65,4 +80,4 @@ if __name__ == "__main__":
     # [[3/12, 4/12, 5/12]
     #  [2/12, 5/12, 5/12]]
     acc = np.sum(pred == y) / len(pred)
-    print(f'Accuracy = {100 * acc:.2f}%')
+    print(f"Accuracy = {100 * acc:.2f}%")

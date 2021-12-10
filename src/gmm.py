@@ -60,20 +60,22 @@ class GMM:
 
 
 def load_data():
-    x = np.stack([
-        np.random.multivariate_normal(mean=[4, 0], cov=[[2, 0], [0, 2]], size=[1000]),
-        np.random.multivariate_normal(mean=[0, 4], cov=[[2, 0], [0, 2]], size=[1000])
-    ])
+    x = np.stack(
+        [
+            np.random.multivariate_normal(mean=[4, 0], cov=[[2, 0], [0, 2]], size=[1000]),
+            np.random.multivariate_normal(mean=[0, 4], cov=[[2, 0], [0, 2]], size=[1000]),
+        ]
+    )
     return x
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x = load_data()
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
-    plt.title('Truth')
-    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
-    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
+    plt.title("Ground Truth")
+    plt.scatter(x[0, :, 0], x[0, :, 1], color="r", marker=".")
+    plt.scatter(x[1, :, 0], x[1, :, 1], color="g", marker=".")
 
     x = x.reshape(-1, 2)
     gmm = GMM(2, iterations=1000)
@@ -82,7 +84,7 @@ if __name__ == '__main__':
 
     x0, x1 = x[pred == 0], x[pred == 1]
     plt.subplot(1, 2, 2)
-    plt.title('Prediction')
-    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
-    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
+    plt.title("Prediction")
+    plt.scatter(x0[:, 0], x0[:, 1], color="r", marker=".")
+    plt.scatter(x1[:, 0], x1[:, 1], color="g", marker=".")
     plt.show()

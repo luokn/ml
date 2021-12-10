@@ -46,7 +46,7 @@ class WeakEstimator:  # 弱分类器, 一阶决策树
         self.feature, self.threshold, self.sign = None, None, None  # 划分特征、划分阈值，符号{-1，1}
 
     def fit(self, X: np.ndarray, Y: np.ndarray, weights: np.ndarray):
-        min_error = float('inf')  # 最小带权误差
+        min_error = float("inf")  # 最小带权误差
         for feature, x in enumerate(X.T):
             for threshold in np.arange(np.min(x) - self.lr, np.max(x) + self.lr, self.lr):
                 for sign in [1, -1]:
@@ -60,32 +60,29 @@ class WeakEstimator:  # 弱分类器, 一阶决策树
 
 
 def load_data():
-    x = np.stack([
-        np.random.randn(500, 2) + np.array([2, 0]),
-        np.random.randn(500, 2) + np.array([0, 2])
-    ])
+    x = np.stack([np.random.randn(500, 2) + np.array([2, 0]), np.random.randn(500, 2) + np.array([0, 2])])
     y = np.stack([np.full([500], -1), np.full([500], 1)])
     return x, y
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x, y = load_data()
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
-    plt.title('Truth')
-    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
-    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
+    plt.title("Ground Truth")
+    plt.scatter(x[0, :, 0], x[0, :, 1], color="r", marker=".")
+    plt.scatter(x[1, :, 0], x[1, :, 1], color="g", marker=".")
 
     x, y = x.reshape(-1, 2), y.flatten()
     adaboost = AdaBoost(50)
     adaboost.fit(x, y)
     pred = adaboost(x)
     acc = np.sum(pred == y) / len(pred)
-    print(f'Accuracy = {100 * acc:.2f}%')
+    print(f"Accuracy = {100 * acc:.2f}%")
 
     x0, x1 = x[pred == -1], x[pred == 1]
     plt.subplot(1, 2, 2)
-    plt.title('Prediction')
-    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
-    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
+    plt.title("Prediction")
+    plt.scatter(x0[:, 0], x0[:, 1], color="r", marker=".")
+    plt.scatter(x1[:, 0], x1[:, 1], color="g", marker=".")
     plt.show()

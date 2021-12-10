@@ -12,7 +12,7 @@ class SVM:
     Support Vector Machines(支持向量机)
     """
 
-    def __init__(self, C=1.0, kernel='linear', iterations=100, tol=1e-3, **kwargs):
+    def __init__(self, C=1.0, kernel="linear", iterations=100, tol=1e-3, **kwargs):
         """
         Args:
             C (float, optional): 惩罚因子. Defaults to 1.0.
@@ -20,15 +20,15 @@ class SVM:
             iterations (int, optional): 最大迭代次数. Defaults to 100.
             tol (float, optional): 绝对误差限. Defaults to 1e-3.
         """
-        assert kernel in ['linear', 'poly', 'rbf']
+        assert kernel in ["linear", "poly", "rbf"]
         self.C, self.iterations, self.tol = C, iterations, tol
-        if kernel == 'linear':
+        if kernel == "linear":
             self.K = LinearKernel()  # 线性核函数
-        if kernel == 'poly':
+        if kernel == "poly":
             self.K = PolyKernel()  # 多项式核函数
-        if kernel == 'rbf':
-            self.K = RBFKernel(kwargs['sigma'])  # 径向基核函数
-        self.alpha, self.b = None, .0
+        if kernel == "rbf":
+            self.K = RBFKernel(kwargs["sigma"])  # 径向基核函数
+        self.alpha, self.b = None, 0.0
         self.X, self.Y = None, None
 
     def fit(self, X: np.ndarray, Y: np.ndarray):
@@ -122,7 +122,10 @@ class RBFKernel:
 
 
 def load_data():
-    x0, x1 = np.random.randn(40, 10, 2), np.random.randn(400, 2),
+    x0, x1 = (
+        np.random.randn(40, 10, 2),
+        np.random.randn(400, 2),
+    )
     y = np.stack([np.full([400], -1), np.full([400], 1)])
     for i, theta in enumerate(np.linspace(0, 2 * np.pi, 40)):
         x0[i] += 4 * np.array([np.cos(theta), np.sin(theta)])
@@ -130,37 +133,37 @@ def load_data():
     return x, y
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x, y = load_data()
     plt.figure(figsize=[18, 6])
     plt.subplot(1, 3, 1)
-    plt.title('Truth')
+    plt.title("Ground Truth")
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
-    plt.scatter(x[0, :, 0], x[0, :, 1], color='r', marker='.')
-    plt.scatter(x[1, :, 0], x[1, :, 1], color='g', marker='.')
+    plt.scatter(x[0, :, 0], x[0, :, 1], color="r", marker=".")
+    plt.scatter(x[1, :, 0], x[1, :, 1], color="g", marker=".")
 
     x, y = x.reshape(-1, 2), y.flatten()
-    svm = SVM(C=10, kernel='rbf', sigma=5, iterations=500)
+    svm = SVM(C=10, kernel="rbf", sigma=5, iterations=500)
     svm.fit(x, y)
     pred = svm(x)
     acc = np.sum(pred == y) / len(pred)
-    print(f'Accuracy = {100 * acc:.2f}%')
+    print(f"Accuracy = {100 * acc:.2f}%")
 
     x0, x1 = x[pred == -1], x[pred == 1]
     plt.subplot(1, 3, 2)
-    plt.title('Prediction')
+    plt.title("Prediction")
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
-    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
-    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color="r", marker=".")
+    plt.scatter(x1[:, 0], x1[:, 1], color="g", marker=".")
 
     sv = svm.support_vectors
     plt.subplot(1, 3, 3)
-    plt.title('Support vectors')
+    plt.title("Support vectors")
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
-    plt.scatter(x0[:, 0], x0[:, 1], color='r', marker='.')
-    plt.scatter(x1[:, 0], x1[:, 1], color='g', marker='.')
-    plt.scatter(sv[:, 0], sv[:, 1], color='b', marker='.')
+    plt.scatter(x0[:, 0], x0[:, 1], color="r", marker=".")
+    plt.scatter(x1[:, 0], x1[:, 1], color="g", marker=".")
+    plt.scatter(sv[:, 0], sv[:, 1], color="b", marker=".")
     plt.show()
