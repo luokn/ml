@@ -29,10 +29,18 @@ class NaiveBayesClassifier:
         Y = np.zeros([len(X)], dtype=int)
         for i, x in enumerate(X):
             prob = np.log(self.prior_prob) + np.array(
-                [np.sum(np.log(cond_prob[range(len(x)), x])) for cond_prob in self.cond_prob]
+                [np.log(cond_prob[range(len(x)), x]).sum() for cond_prob in self.cond_prob]
             )  # 先验概率的对数,加上条件概率的对数
             Y[i] = np.argmax(prob)
         return Y
+
+    def predict_prob(self, X: np.ndarray):
+        prob = np.zeros([len(X), len(self.cond_prob)])
+        for i, x in enumerate(X):
+            for c, prior_prob, cond_prob in zip(range(len(self.cond_prob)), self.prior_prob, self.cond_prob):
+                print(f"prior_prob = {prior_prob}, cond_prob = {cond_prob[range(len(x)), x]}")
+                prob[i, c] = prior_prob * np.prod(cond_prob[range(len(x)), x])
+        return prob
 
     @staticmethod
     def _estimate_prob(x: np.ndarray, n: int):
@@ -81,3 +89,6 @@ if __name__ == "__main__":
     #  [2/12, 5/12, 5/12]]
     acc = np.sum(pred == y) / len(pred)
     print(f"Accuracy = {100 * acc:.2f}%")
+    print()
+    print(naive_bayes.predict_prob([[1, 0]]))  # 输出 [[1, 0]]的概率
+    # [[0.061, 0.0327]]
