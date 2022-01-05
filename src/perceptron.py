@@ -12,20 +12,19 @@ class Perceptron:
     Perceptron classifier(感知机分类器)
     """
 
-    def __init__(self, input_dim: int, lr: float):
+    def __init__(self, input_dim: int):
         """
         Args:
             input_dim (int): 输入特征维度
-            lr (float): 学习率
         """
-        self.input_dim, self.lr = input_dim, lr
+        self.input_dim = input_dim
         self.weights = np.random.randn(input_dim + 1)  # 权重
 
-    def fit(self, X: np.ndarray, Y: np.ndarray):
+    def fit(self, X: np.ndarray, Y: np.ndarray, lr=1e-3):
         for x, y in zip(pad(X), Y):
             if y * (x @ self.weights) <= 0:  # 分类错误, y 与 wx + b 符号不同
                 neg_grad = x * y  # 计算weights的负梯度
-                self.weights += self.lr * neg_grad  # 沿负梯度方向更新weights
+                self.weights += lr * neg_grad  # 沿负梯度方向更新weights
 
     def __call__(self, X: np.ndarray):
         pred = pad(X) @ self.weights
@@ -60,8 +59,8 @@ if __name__ == "__main__":
     plt.scatter(x[1, :, 0], x[1, :, 1], color="g", marker=".")
 
     x, y = x.reshape(-1, 2), y.flatten()
-    perceptron = Perceptron(input_dim=2, lr=1e-4)
-    train_perceptron(perceptron, x, y, epochs=500)
+    perceptron = Perceptron(input_dim=2)
+    train_perceptron(perceptron, x, y, epochs=100)
     pred = perceptron(x)
     acc = np.sum(pred == y) / len(pred)
     print(f"Accuracy = {100 * acc:.2f}%")

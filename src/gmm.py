@@ -15,23 +15,28 @@ class GMM:
     Gaussian mixture model(高斯混合模型)
     """
 
-    def __init__(self, n_components: int, iterations=100, cov_reg=1e-06):
+    def __init__(self, n_components: int):
         """
         Args:
             n_components (int): 聚类类别数
-            iterations (int, optional): 迭代次数. Defaults to 100.
-            cov_reg ([type], optional): 防止协方差矩阵奇异的微小变量. Defaults to 1e-06.
         """
-        self.n_components, self.iterations, self.cov_reg = n_components, iterations, cov_reg
+        self.n_components, self.cov_reg = n_components, None
         self.weights = np.full(self.n_components, 1 / self.n_components)
         self.means, self.covs = None, None
 
-    def fit(self, X: np.ndarray):
+    def fit(self, X: np.ndarray, iterations=100, cov_reg=1e-06):
+        """
+        Args:
+            X (np.ndarray): 输入
+            iterations (int, optional): 迭代次数. Defaults to 100.
+            cov_reg (float, optional): 防止协方差矩阵奇异的微小变量. Defaults to 1e-06.
+        """
+        self.cov_reg = cov_reg
         # 随机选择n_components个点作为高斯分布中心
         self.means = np.array(X[random.sample(range(X.shape[0]), self.n_components)])
         # 初始高斯分布协方差均为单位矩阵
         self.covs = np.stack([np.eye(X.shape[1]) for _ in range(self.n_components)])
-        for _ in range(self.iterations):
+        for _ in range(iterations):
             G = self._expect(X)  # E步
             self._maximize(X, G)  # M步
 
@@ -78,8 +83,8 @@ if __name__ == "__main__":
     plt.scatter(x[1, :, 0], x[1, :, 1], color="g", marker=".")
 
     x = x.reshape(-1, 2)
-    gmm = GMM(2, iterations=1000)
-    gmm.fit(x)
+    gmm = GMM(2)
+    gmm.fit(x, iterations=1000)
     pred = gmm(x)
 
     x0, x1 = x[pred == 0], x[pred == 1]

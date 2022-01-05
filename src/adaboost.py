@@ -17,12 +17,17 @@ class AdaBoost:
         """
         Args:
             n_estimators (int): 弱分类器个数
-            lr (float, optional): 学习率. Defaults to 0.01.
-            eps (float, optional): 误差下限. Defaults to 1e-5.
         """
         self.n_estimators, self.estimators = n_estimators, []  # 弱分类器
 
     def fit(self, X: np.ndarray, Y: np.ndarray, lr=0.01, eps=1e-5):
+        """
+        Args:
+            X (np.ndarray): ...
+            Y (np.ndarray): ...
+            lr (float, optional): 学习率. Defaults to 0.01.
+            eps (float, optional): 误差下限. Defaults to 1e-5.
+        """
         weights = np.full(len(X), 1 / len(X))  # 样本权重
         for _ in range(self.n_estimators):
             estimator = WeakEstimator()

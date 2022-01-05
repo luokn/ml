@@ -12,20 +12,18 @@ class LogisticRegression:
     Logistic regression classifier(逻辑斯蒂回归分类器)
     """
 
-    def __init__(self, input_dim: int, lr: float):
+    def __init__(self, input_dim: int):
         """
         Args:
             input_dim (int):输入维度
-            lr (float): 学习率
         """
-        self.lr = lr  # 学习率
         self.weights = np.random.randn(input_dim + 1)  # 随机初始化参数
 
-    def fit(self, X: np.ndarray, Y: np.ndarray):
+    def fit(self, X: np.ndarray, Y: np.ndarray, lr=1e-3):
         X_pad = pad(X)  # 为X填充1作为偏置
         pred = sigmoid(X_pad @ self.weights)  # 计算预测值
         grad = X_pad.T @ (pred - Y) / len(pred)  # 计算梯度
-        self.weights -= self.lr * grad  # 沿负梯度更新参数
+        self.weights -= lr * grad  # 沿负梯度更新参数
 
     def __call__(self, X: np.ndarray):
         pred = sigmoid(pad(X) @ self.weights)  # 计算预测值
@@ -65,7 +63,7 @@ if __name__ == "__main__":
     plt.scatter(x[1, :, 0], x[1, :, 1], color="g", marker=".")
 
     x, y = x.reshape(-1, 2), y.flatten()
-    logistic_regression = LogisticRegression(2, lr=1e-3)
+    logistic_regression = LogisticRegression(2)
     train_logistic_regression(logistic_regression, x, y, epochs=500)
     pred = logistic_regression(x)
     acc = np.sum(pred == y) / len(pred)
