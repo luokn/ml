@@ -12,11 +12,11 @@ class EM:  # 三硬币模型
     Expectation-maximization algorithm(期望最大算法)
     """
 
-    def __init__(self, prob: list, iterations=100):
-        self.prob, self.iterations = np.array(prob), iterations
+    def __init__(self, prob: list):
+        self.prob = np.array(prob)
 
-    def fit(self, X: np.ndarray):
-        for _ in range(self.iterations):
+    def fit(self, X: np.ndarray, iterations=100):
+        for _ in range(iterations):
             M = self._expect(X)  # E步
             self._maximize(X, M)  # M步
 
@@ -38,10 +38,10 @@ class EM:  # 三硬币模型
 if __name__ == "__main__":
     x = np.array([1, 1, 0, 1, 0, 0, 1, 0, 1, 1])
 
-    em = EM([0.5, 0.5, 0.5], 100)
+    em = EM([0.5, 0.5, 0.5])
     em.fit(x)
     print(em.prob)  # [0.5, 0.6, 0.6]
 
-    em = EM([0.4, 0.6, 0.7], 100)
+    em = EM([0.4, 0.6, 0.7])
     em.fit(x)
     print(em.prob)  # [0.4064, 0.5368, 0.6432]
