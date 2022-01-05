@@ -13,22 +13,21 @@ class AdaBoost:
     Adaptive Boosting(自适应提升算法)
     """
 
-    def __init__(self, n_estimators: int, lr=0.01, eps=1e-5):
+    def __init__(self, n_estimators: int):
         """
         Args:
             n_estimators (int): 弱分类器个数
             lr (float, optional): 学习率. Defaults to 0.01.
             eps (float, optional): 误差下限. Defaults to 1e-5.
         """
-        self.n_estimators, self.lr, self.eps = n_estimators, lr, eps
-        self.estimators = []  # 弱分类器
+        self.n_estimators, self.estimators = n_estimators, []  # 弱分类器
 
-    def fit(self, X: np.ndarray, Y: np.ndarray):
-        weights = np.full([len(X)], 1 / len(X))  # 样本权重
+    def fit(self, X: np.ndarray, Y: np.ndarray, lr=0.01, eps=1e-5):
+        weights = np.full(len(X), 1 / len(X))  # 样本权重
         for _ in range(self.n_estimators):
-            estimator = WeakEstimator(lr=self.lr)
-            error = estimator.fit(X, Y, weights)  # 带权重训练弱分类器
-            if error < self.eps:  # 误差达到下限，提前停止迭代
+            estimator = WeakEstimator()
+            error = estimator.fit(X, Y, weights=weights, lr=lr)  # 带权重训练弱分类器
+            if error < eps:  # 误差达到下限，提前停止迭代
                 break
             alpha = np.log((1 - error) / error) / 2  # 更新弱分类器权重
             weights *= np.exp(-alpha * Y * estimator(X))  # 更新样本权重
@@ -41,14 +40,13 @@ class AdaBoost:
 
 
 class WeakEstimator:  # 弱分类器, 一阶决策树
-    def __init__(self, lr: float):
-        self.lr = lr
+    def __init__(self):
         self.feature, self.threshold, self.sign = None, None, None  # 划分特征、划分阈值，符号{-1，1}
 
-    def fit(self, X: np.ndarray, Y: np.ndarray, weights: np.ndarray):
+    def fit(self, X: np.ndarray, Y: np.ndarray, weights: np.ndarray, lr: float):
         min_error = float("inf")  # 最小带权误差
         for feature, x in enumerate(X.T):
-            for threshold in np.arange(np.min(x) - self.lr, np.max(x) + self.lr, self.lr):
+            for threshold in np.arange(np.min(x) - lr, np.max(x) + lr, lr):
                 for sign in [1, -1]:
                     error = np.sum(weights[np.where(x > threshold, sign, -sign) != Y])  # 取分类错误的样本权重求和
                     if error < min_error:
@@ -67,7 +65,7 @@ def load_data():
 
 if __name__ == "__main__":
     x, y = load_data()
-    plt.figure(figsize=[12, 6])
+    plt.figure("AdaBoost", figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title("Ground Truth")
     plt.scatter(x[0, :, 0], x[0, :, 1], color="r", marker=".")
