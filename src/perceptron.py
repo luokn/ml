@@ -42,7 +42,7 @@ def load_data(n_samples_per_class=500):
             np.random.randn(n_samples_per_class, 2) + np.array([-1, 1]),
         ]
     )
-    y = np.concatenate([np.full([n_samples_per_class], -1), np.full([n_samples_per_class], 1)])
+    y = np.array([-1] * n_samples_per_class + [1] * n_samples_per_class)
 
     training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
 

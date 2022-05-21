@@ -149,7 +149,7 @@ def load_data(n_samples_per_class=200):
         X_neg[i] += 5 * np.array([np.cos(theta), np.sin(theta)])
 
     X = np.concatenate([X_neg.reshape(-1, 2), X_pos])
-    y = np.concatenate([np.full([n_samples_per_class], -1), np.full([n_samples_per_class], 1)])
+    y = np.array([-1] * n_samples_per_class + [1] * n_samples_per_class)
 
     # 打乱索引，拆分训练集和测试集
     training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
