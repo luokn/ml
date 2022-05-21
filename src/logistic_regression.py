@@ -50,7 +50,6 @@ def load_data(n_samples_per_class=500):
     y = np.array([0] * n_samples_per_class + [1] * n_samples_per_class)
 
     training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
-
     return X, y, training_set, test_set
 
 
@@ -59,20 +58,19 @@ def train_logistic_regression(model, X, y, epochs, batch_size=32):
     for _ in range(epochs):
         np.random.shuffle(indices)
         for i in range(batch_size, len(X) + 1, batch_size):
-            model.fit(X[indices[(i - batch_size) : i]], y[indices[(i - batch_size) : i]])
+            model.fit(X[indices[i - batch_size : i]], y[indices[i - batch_size : i]])
 
 
 if __name__ == "__main__":
     X, y, training_set, test_set = load_data()
 
-    X_0, X_1 = X[y == 0], X[y == 1]
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title("Ground Truth")
     plt.xlim(-4, 4)
     plt.ylim(-4, 4)
-    plt.scatter(X_0[:, 0], X_0[:, 1], marker=".")
-    plt.scatter(X_1[:, 0], X_1[:, 1], marker=".")
+    plt.scatter(X[y == 0, 0], X[y == 0, 1], marker=".")
+    plt.scatter(X[y == 1, 0], X[y == 1, 1], marker=".")
 
     logistic_regression = LogisticRegression(2)
     train_logistic_regression(logistic_regression, X, y, epochs=500)
@@ -80,17 +78,20 @@ if __name__ == "__main__":
     acc = np.sum(y_pred[test_set] == y[test_set]) / len(test_set)
     print(f"Accuracy = {100 * acc:.2f}%")
 
-    X_0, X_1 = X[y_pred == 0], X[y_pred == 1]
     plt.subplot(1, 2, 2)
     plt.title("Prediction")
     plt.xlim(-4, 4)
     plt.ylim(-4, 4)
-    plt.scatter(X_0[:, 0], X_0[:, 1], marker=".")
-    plt.scatter(X_1[:, 0], X_1[:, 1], marker=".")
+    plt.scatter(X[y_pred == 0, 0], X[y_pred == 0, 1], marker=".")
+    plt.scatter(X[y_pred == 1, 0], X[y_pred == 1, 1], marker=".")
 
     w = logistic_regression.weights
     a, b = -w[0] / w[1], -w[2] / w[1]
     line_x = np.linspace(-4, 4, 400)
     line_y = a * line_x + b
-    plt.plot(line_x, line_y, c="b", lw=1)
+    plt.plot(line_x, line_y, lw=1)
+
+    plt.fill_between(line_x, np.full(400, -4), line_y, alpha=0.1)
+    plt.fill_between(line_x, np.full(400, +4), line_y, alpha=0.1)
+
     plt.show()

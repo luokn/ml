@@ -45,7 +45,6 @@ def load_data(n_samples_per_class=500):
     y = np.array([-1] * n_samples_per_class + [1] * n_samples_per_class)
 
     training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
-
     return X, y, training_set, test_set
 
 
@@ -59,14 +58,13 @@ def train_perceptron(model, X, y, epochs=100):
 if __name__ == "__main__":
     X, y, training_set, test_set = load_data()
 
-    X_neg, X_pos = X[y == -1], X[y == 1]
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title("Ground Truth")
-    plt.xlim(-5, 5)
-    plt.ylim(-5, 5)
-    plt.scatter(X_neg[:, 0], X_neg[:, 1], marker=".")
-    plt.scatter(X_pos[:, 0], X_pos[:, 1], marker=".")
+    plt.xlim(-4, 4)
+    plt.ylim(-4, 4)
+    plt.scatter(X[y == -1, 0], X[y == -1, 1], marker=".")
+    plt.scatter(X[y == +1, 0], X[y == +1, 1], marker=".")
 
     perceptron = Perceptron(input_dim=2)
     train_perceptron(perceptron, X[training_set], y[training_set], epochs=100)
@@ -74,17 +72,20 @@ if __name__ == "__main__":
     acc = np.sum(y_pred[test_set] == y[test_set]) / len(test_set)
     print(f"Accuracy = {100 * acc:.2f}%")
 
-    X_neg, X_pos = X[y_pred == -1], X[y_pred == 1]
     plt.subplot(1, 2, 2)
     plt.title("Prediction")
-    plt.xlim(-5, 5)
-    plt.ylim(-5, 5)
-    plt.scatter(X_neg[:, 0], X_neg[:, 1], marker=".")
-    plt.scatter(X_pos[:, 0], X_pos[:, 1], marker=".")
+    plt.xlim(-4, 4)
+    plt.ylim(-4, 4)
+    plt.scatter(X[y_pred == -1, 0], X[y_pred == -1, 1], marker=".")
+    plt.scatter(X[y_pred == +1, 0], X[y_pred == +1, 1], marker=".")
 
     w = perceptron.weights
     a, b = -w[0] / w[1], -w[2] / w[1]
-    line_x = np.linspace(-5, 5, 100)
+    line_x = np.linspace(-4, 4, 400)
     line_y = a * line_x + b
-    plt.plot(line_x, line_y, c="b", lw=1)
+    plt.plot(line_x, line_y, lw=1)
+
+    plt.fill_between(line_x, np.full(400, -4), line_y, alpha=0.1)
+    plt.fill_between(line_x, np.full(400, +4), line_y, alpha=0.1)
+
     plt.show()

@@ -32,42 +32,35 @@ class KNN:
         return y_pred
 
 
-def load_data(n_smaple_per_class=200):
-    X = np.concatenate(
-        [
-            np.random.randn(n_smaple_per_class, 2) + np.array([2, 2]),
-            np.random.randn(n_smaple_per_class, 2),
-            np.random.randn(n_smaple_per_class, 2) + np.array([2, -2]),
-        ]
-    )
-    y = np.array([0] * n_smaple_per_class + [1] * n_smaple_per_class + [2] * n_smaple_per_class)
+def load_data(n_samples_per_class=200, n_classes=5):
+    X = np.concatenate([np.random.randn(n_samples_per_class, 2) + 3 * np.random.randn(2) for _ in range(n_classes)])
+    y = np.concatenate([np.full(n_samples_per_class, label) for label in range(n_classes)])
 
     training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
-
     return X, y, training_set, test_set
 
 
 if __name__ == "__main__":
-    X, y, training_set, test_set = load_data()
+    n_classes = 5
+    X, y, training_set, test_set = load_data(n_classes=n_classes)
 
-    X_0, X_1, X_2 = X[y == 0], X[y == 1], X[y == 2]
     plt.figure(figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title("Ground Truth")
-    plt.scatter(X_0[:, 0], X_0[:, 1], marker=".")
-    plt.scatter(X_1[:, 0], X_1[:, 1], marker=".")
-    plt.scatter(X_2[:, 0], X_2[:, 1], marker=".")
+    for label in range(n_classes):
+        plt.scatter(X[y == label, 0], X[y == label, 1], label=f"class {label}", marker=".")
+    plt.legend()
 
-    knn = KNN(3)
+    knn = KNN(k=10)
     knn.fit(X[training_set], y[training_set])
     y_pred = knn(X)
     acc = np.sum(y_pred[test_set] == y[test_set]) / len(y_pred[test_set])
     print(f"Accuracy = {100 * acc:.2f}%")
 
-    X_0, X_1, X_2 = X[y_pred == 0], X[y_pred == 1], X[y_pred == 2]
     plt.subplot(1, 2, 2)
     plt.title("Prediction")
-    plt.scatter(X_0[:, 0], X_0[:, 1], marker=".")
-    plt.scatter(X_1[:, 0], X_1[:, 1], marker=".")
-    plt.scatter(X_2[:, 0], X_2[:, 1], marker=".")
+    for label in range(n_classes):
+        plt.scatter(X[y_pred == label, 0], X[y_pred == label, 1], label=f"class {label}", marker=".")
+    plt.legend()
+
     plt.show()
