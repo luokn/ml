@@ -26,51 +26,47 @@ class PCA:
         return X_norm @ V[:, topk]  # 将去中心化的X乘以前K大特征值对应的特征向量
 
 
-def load_data():
-    x = np.concatenate(
+def load_data(n_samples_per_class=200):
+    X = np.concatenate(
         [
-            np.random.randn(200, 2) + np.array([2, 0]),
-            np.random.randn(200, 2),
-            np.random.randn(200, 2) + np.array([-2, 0]),
+            np.random.randn(n_samples_per_class, 2) + np.array([2, 0]),
+            np.random.randn(n_samples_per_class, 2),
+            np.random.randn(n_samples_per_class, 2) + np.array([-2, 0]),
         ]
     )
     theta = np.pi / 4  # 逆时针旋转45°
-    scale = np.diag([1.2, 0.6])  # 缩放矩阵
+    scale = np.diag([1.2, 0.5])  # 缩放矩阵
     rotate = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])  # 旋转矩阵
-    return x @ scale @ rotate.T
+    return X @ scale @ rotate.T
 
 
 if __name__ == "__main__":
-    x = load_data()
-    x0, x1, x2 = x.reshape(3, -1, 2)
+    X = load_data()
+
     plt.figure(figsize=[15, 5])
     plt.subplot(1, 3, 1)
     plt.title("Ground Truth")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(x0[:, 0], x0[:, 1], color="r", marker=".")
-    plt.scatter(x1[:, 0], x1[:, 1], color="g", marker=".")
-    plt.scatter(x2[:, 0], x2[:, 1], color="b", marker=".")
+    for x in X.reshape(3, -1, 2):
+        plt.scatter(x[:, 0], x[:, 1], marker=".")
 
     # 不降维
-    y = PCA(2)(x)
-    y0, y1, y2 = y.reshape(3, -1, 2)
+    Y = PCA(2)(X)
     plt.subplot(1, 3, 2)
     plt.title("PCA 2D")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(y0[:, 0], y0[:, 1], color="r", marker=".")
-    plt.scatter(y1[:, 0], y1[:, 1], color="g", marker=".")
-    plt.scatter(y2[:, 0], y2[:, 1], color="b", marker=".")
+    for y in Y.reshape(3, -1, 2):
+        plt.scatter(y[:, 0], y[:, 1], marker=".")
 
     # 降为1维
-    z = PCA(1)(x)
-    z0, z1, z2 = z.reshape(3, -1)
+    Z = PCA(1)(X)
     plt.subplot(1, 3, 3)
     plt.title("PCA 1D")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(z0, np.zeros([200]), color="r", marker=".")
-    plt.scatter(z1, np.zeros([200]), color="g", marker=".")
-    plt.scatter(z2, np.zeros([200]), color="b", marker=".")
+    for z in Z.reshape(3, -1):
+        plt.scatter(z, np.zeros_like(z), marker=".")
+
     plt.show()
