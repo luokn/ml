@@ -60,40 +60,40 @@ def load_data():
     theta = np.pi / 4
     scale = np.array([[2, 0], [0, 0.8]])  # 缩放
     rotate = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])  # 旋转
-    x = np.stack([np.random.randn(500, 2) + [0, 2], np.random.randn(500, 2) - [0, 2]]) @ scale @ rotate
+    X = np.stack([np.random.randn(500, 2) + [0, 2], np.random.randn(500, 2) - [0, 2]]) @ scale @ rotate
     y = np.stack([np.full([500], 0), np.full([500], 1)])
-    return x, y
+    return X, y
 
 
 if __name__ == "__main__":
-    x, y = load_data()
+    X, y = load_data()
     plt.figure(figsize=[18, 6])
     plt.subplot(1, 3, 1)
     plt.title("Ground Truth")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(x[0, :, 0], x[0, :, 1], color="r", marker=".")
-    plt.scatter(x[1, :, 0], x[1, :, 1], color="g", marker=".")
+    plt.scatter(X[0, :, 0], X[0, :, 1], marker=".")
+    plt.scatter(X[1, :, 0], X[1, :, 1], marker=".")
 
-    x, y = x.reshape(-1, 2), y.flatten()
+    X, y = X.reshape(-1, 2), y.reshape(-1)
 
     lda = LDA(1)
-    lda.fit(x, y)
-    z = lda(x)
+    lda.fit(X, y)
+    Z = lda(X)
     plt.subplot(1, 3, 2)
     plt.title("LDA")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(z[:500, 0], np.zeros([500]), color="r", marker=".")
-    plt.scatter(z[500:, 0], np.zeros([500]), color="g", marker=".")
+    plt.scatter(Z[:500, 0], np.zeros([500]), marker=".")
+    plt.scatter(Z[500:, 0], np.zeros([500]), marker=".")
 
     # 和PCA对比
     pca = PCA(1)
-    z = pca(x)
+    Z = pca(X)
     plt.subplot(1, 3, 3)
     plt.title("PCA")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(z[:500, 0], np.zeros([500]), color="r", marker=".")
-    plt.scatter(z[500:, 0], np.zeros([500]), color="g", marker=".")
+    plt.scatter(Z[:500, 0], np.zeros([500]), marker=".")
+    plt.scatter(Z[500:, 0], np.zeros([500]), marker=".")
     plt.show()
