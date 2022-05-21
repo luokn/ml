@@ -116,8 +116,8 @@ class SVM:
                 E[i2] = self.__E(i2)
 
     def __call__(self, X: np.ndarray):
-        pred = np.array([self.__g(x) for x in X])
-        return np.where(pred > 0, 1, -1)  # 将(-\infinity, \infinity)之间的分布转为{-1, +1}标签
+        y_pred = np.array([self.__g(x) for x in X])
+        return np.where(y_pred > 0, 1, -1)  # 将(-\infinity, \infinity)之间的分布转为{-1, +1}标签
 
     @property
     def support_vectors(self):  # 支持向量
@@ -138,39 +138,44 @@ class SVM:
         return np.abs(g_i * y_i - 1) < self.tol
 
 
-def load_data():
-    X0, X1 = np.random.randn(40, 10, 2), np.random.randn(400, 2)
+def load_data(n_samples_per_class=200):
+    assert n_samples_per_class % 10 == 0, "n_samples_per_class must be divisible by 10"
 
-    for i, theta in enumerate(np.linspace(0, 2 * np.pi, 40)):
-        X0[i] += 4 * np.array([np.cos(theta), np.sin(theta)])
+    X_neg = np.random.randn(n_samples_per_class // 10, 10, 2)
+    X_pos = np.random.randn(n_samples_per_class, 2)
 
-    X = np.stack([X0.reshape(-1, 2), X1])
-    y = np.stack([np.full([400], -1), np.full([400], 1)])
-    return X, y
+    # 将负样本放置到圆环区域
+    for i, theta in enumerate(np.linspace(0, 2 * np.pi, len(X_neg))):
+        X_neg[i] += 5 * np.array([np.cos(theta), np.sin(theta)])
+
+    X = np.concatenate([X_neg.reshape(-1, 2), X_pos])
+    y = np.concatenate([np.full([n_samples_per_class], -1), np.full([n_samples_per_class], 1)])
+
+    # 打乱索引，拆分训练集和测试集
+    training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
+
+    return X, y, training_set, test_set
 
 
 if __name__ == "__main__":
-    X, y = load_data()
+    X, y, training_set, test_set = load_data()
 
+    X_neg, X_pos = X[y == -1], X[y == 1]
     plt.figure(figsize=[15, 5])
     plt.subplot(1, 3, 1)
     plt.title("Ground Truth")
     plt.xlim(-7, 7)
     plt.ylim(-7, 7)
-    plt.scatter(X[0, :, 0], X[0, :, 1], color="r", marker=".")
-    plt.scatter(X[1, :, 0], X[1, :, 1], color="g", marker=".")
+    plt.scatter(X_neg[:, 0], X_neg[:, 1], color="r", marker=".")
+    plt.scatter(X_pos[:, 0], X_pos[:, 1], color="g", marker=".")
 
-    X, y = X.reshape(-1, 2), y.reshape(-1)
-
-    svm = SVM(kernel="rbf", C=10, iterations=500, sigma=5)
-    svm.fit(X, y)
-
-    pred = svm(X)
-
-    acc = np.sum(pred == y) / len(pred)
+    svm = SVM(kernel="rbf", C=100, iterations=100, sigma=5)
+    svm.fit(X[training_set], y[training_set])
+    y_pred = svm(X)
+    acc = np.sum(y_pred[test_set] == y[test_set]) / len(test_set)
     print(f"Accuracy = {100 * acc:.2f}%")
 
-    X_neg, X_pos = X[pred == -1], X[pred == 1]
+    X_neg, X_pos = X[y_pred == -1], X[y_pred == 1]
     plt.subplot(1, 3, 2)
     plt.title("Prediction")
     plt.xlim(-7, 7)
