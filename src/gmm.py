@@ -64,32 +64,32 @@ class GMM:
         self.covs += self.cov_reg * np.eye(X.shape[1])  # 添加微小量防止奇异
 
 
-def load_data():
-    X = np.stack(
+def load_data(n_samples_per_class=500):
+    X = np.concatenate(
         [
-            np.random.multivariate_normal(mean=[4, 0], cov=[[2, 0], [0, 2]], size=[1000]),
-            np.random.multivariate_normal(mean=[0, 4], cov=[[2, 0], [0, 2]], size=[1000]),
+            np.random.multivariate_normal(mean=[4, 0], cov=[[2, 0], [0, 2]], size=[n_samples_per_class]),
+            np.random.multivariate_normal(mean=[0, 4], cov=[[2, 0], [0, 2]], size=[n_samples_per_class]),
         ]
     )
-    return X
+    y = np.array([0] * n_samples_per_class + [1] * n_samples_per_class)
+    return X, y
 
 
 if __name__ == "__main__":
-    X = load_data()
-    plt.figure(figsize=[12, 6])
+    X, y = load_data()
+    plt.figure(figsize=[15, 7])
     plt.subplot(1, 2, 1)
     plt.title("Ground Truth")
-    plt.scatter(X[0, :, 0], X[0, :, 1], marker=".")
-    plt.scatter(X[1, :, 0], X[1, :, 1], marker=".")
+    plt.scatter(X[y == 0, 0], X[y == 0, 1], marker=".")
+    plt.scatter(X[y == 1, 0], X[y == 1, 1], marker=".")
 
-    X = X.reshape(-1, 2)
     gmm = GMM(2)
     gmm.fit(X)
     y_pred = gmm(X)
 
-    x0, x1 = X[y_pred == 0], X[y_pred == 1]
     plt.subplot(1, 2, 2)
     plt.title("Prediction")
-    plt.scatter(x0[:, 0], x0[:, 1], marker=".")
-    plt.scatter(x1[:, 0], x1[:, 1], marker=".")
+    plt.scatter(X[y_pred == 0, 0], X[y_pred == 0, 1], marker=".")
+    plt.scatter(X[y_pred == 1, 0], X[y_pred == 1, 1], marker=".")
+
     plt.show()
