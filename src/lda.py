@@ -56,36 +56,42 @@ class PCA:
         return X_norm @ V[:, topk]  # 将去中心化的X乘以前K大特征值对应的特征向量
 
 
-def load_data():
+def load_data(n_samlpes_per_class=500):
     theta = np.pi / 4
-    scale = np.array([[2, 0], [0, 0.8]])  # 缩放
+    scale = np.array([[2, 0], [0, 0.5]])  # 缩放
     rotate = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])  # 旋转
-    X = np.stack([np.random.randn(500, 2) + [0, 2], np.random.randn(500, 2) - [0, 2]]) @ scale @ rotate
-    y = np.stack([np.full([500], 0), np.full([500], 1)])
+    X = np.concatenate(
+        [
+            np.random.randn(n_samlpes_per_class, 2) + np.array([0, -2]),
+            np.random.randn(n_samlpes_per_class, 2) + np.array([0, +2]),
+        ]
+    )
+    X = X @ scale @ rotate  # 对数据进行缩放和旋转
+    y = np.array([0] * n_samlpes_per_class + [1] * n_samlpes_per_class)
     return X, y
 
 
 if __name__ == "__main__":
     X, y = load_data()
+
     plt.figure(figsize=[18, 6])
     plt.subplot(1, 3, 1)
     plt.title("Ground Truth")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(X[0, :, 0], X[0, :, 1], marker=".")
-    plt.scatter(X[1, :, 0], X[1, :, 1], marker=".")
-
-    X, y = X.reshape(-1, 2), y.reshape(-1)
+    plt.scatter(X[y == 0, 0], X[y == 0, 1], marker=".")
+    plt.scatter(X[y == 1, 0], X[y == 1, 1], marker=".")
 
     lda = LDA(1)
     lda.fit(X, y)
     Z = lda(X)
+
     plt.subplot(1, 3, 2)
     plt.title("LDA")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(Z[:500, 0], np.zeros([500]), marker=".")
-    plt.scatter(Z[500:, 0], np.zeros([500]), marker=".")
+    plt.scatter(Z[y == 0, 0], np.zeros([500]), marker=".")
+    plt.scatter(Z[y == 1, 0], np.zeros([500]), marker=".")
 
     # 和PCA对比
     pca = PCA(1)
@@ -94,6 +100,7 @@ if __name__ == "__main__":
     plt.title("PCA")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
-    plt.scatter(Z[:500, 0], np.zeros([500]), marker=".")
-    plt.scatter(Z[500:, 0], np.zeros([500]), marker=".")
+    plt.scatter(Z[y == 0, 0], np.zeros([500]), marker=".")
+    plt.scatter(Z[y == 1, 0], np.zeros([500]), marker=".")
+
     plt.show()

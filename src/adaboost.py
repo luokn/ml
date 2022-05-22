@@ -86,14 +86,13 @@ def load_data(n_samples_per_class=500):
 if __name__ == "__main__":
     X, y, training_set, test_set = load_data()
 
-    X_neg, X_pos = X[y == -1], X[y == 1]
     plt.figure("AdaBoost", figsize=[12, 6])
     plt.subplot(1, 2, 1)
     plt.title("Ground Truth")
     plt.xlim(-4, 4)
     plt.ylim(-4, 4)
-    plt.scatter(X_neg[:, 0], X_neg[:, 1], marker=".")
-    plt.scatter(X_pos[:, 0], X_pos[:, 1], marker=".")
+    plt.scatter(X[y == -1, 0], X[y == -1, 1], marker=".")
+    plt.scatter(X[y == +1, 0], X[y == +1, 1], marker=".")
 
     adaboost = AdaBoost(n_estimators=20)
     adaboost.fit(X[training_set], y[training_set])
@@ -101,12 +100,11 @@ if __name__ == "__main__":
     acc = np.sum(y_pred[test_set] == y[test_set]) / len(test_set)
     print(f"Accuracy = {100 * acc:.2f}%")
 
-    X_neg, X_pos = X[y_pred == -1], X[y_pred == 1]
     plt.subplot(1, 2, 2)
     plt.title("Prediction")
     plt.xlim(-4, 4)
     plt.ylim(-4, 4)
-    plt.scatter(X_neg[:, 0], X_neg[:, 1], marker=".")
-    plt.scatter(X_pos[:, 0], X_pos[:, 1], marker=".")
+    plt.scatter(X[y_pred == -1, 0], X[y_pred == -1, 1], marker=".")
+    plt.scatter(X[y_pred == +1, 0], X[y_pred == +1, 1], marker=".")
 
     plt.show()

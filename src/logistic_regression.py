@@ -53,7 +53,7 @@ def load_data(n_samples_per_class=500):
     return X, y, training_set, test_set
 
 
-def train_logistic_regression(model, X, y, epochs, batch_size=32):
+def train_logistic_regression(model, X, y, epochs=100, batch_size=32):
     indices = np.arange(len(X))
     for _ in range(epochs):
         np.random.shuffle(indices)

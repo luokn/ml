@@ -67,7 +67,7 @@ if __name__ == "__main__":
     plt.scatter(X[y == +1, 0], X[y == +1, 1], marker=".")
 
     perceptron = Perceptron(input_dim=2)
-    train_perceptron(perceptron, X[training_set], y[training_set], epochs=100)
+    train_perceptron(perceptron, X[training_set], y[training_set])
     y_pred = perceptron(X)
     acc = np.sum(y_pred[test_set] == y[test_set]) / len(test_set)
     print(f"Accuracy = {100 * acc:.2f}%")
