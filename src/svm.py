@@ -66,7 +66,7 @@ class SVM:
 
                 # 计算误差(不使用E缓存)
                 E1 = self.__E(i1)
-                if E1 == 0 or self._satisfy_kkt(i1):
+                if E1 == 0 or self.__satisfy_kkt(i1):
                     # 误差为0或满足KKT条件
                     continue
 
@@ -129,7 +129,7 @@ class SVM:
     def __E(self, i):  # E_i = g(x_i) - y_i
         return self.__g(self.X[i]) - self.y[i]
 
-    def _satisfy_kkt(self, i):  # 是否满足KKT条件
+    def __satisfy_kkt(self, i):  # 是否满足KKT条件
         g_i, y_i = self.__g(self.X[i]), self.y[i]
         if np.abs(self.alpha[i]) < self.tol:
             return g_i * y_i >= 1
@@ -138,9 +138,10 @@ class SVM:
         return np.abs(g_i * y_i - 1) < self.tol
 
 
-def load_data(n_samples_per_class=200):
+def load_data(n_samples_per_class=500):
     assert n_samples_per_class % 10 == 0, "n_samples_per_class must be divisible by 10"
 
+    # 随机生成数据
     X_neg = np.random.randn(n_samples_per_class // 10, 10, 2)
     X_pos = np.random.randn(n_samples_per_class, 2)
 
@@ -153,43 +154,40 @@ def load_data(n_samples_per_class=200):
 
     # 打乱索引，拆分训练集和测试集
     training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
-
     return X, y, training_set, test_set
 
 
 if __name__ == "__main__":
     X, y, training_set, test_set = load_data()
 
-    X_neg, X_pos = X[y == -1], X[y == 1]
     plt.figure(figsize=[15, 5])
     plt.subplot(1, 3, 1)
     plt.title("Ground Truth")
-    plt.xlim(-7, 7)
-    plt.ylim(-7, 7)
-    plt.scatter(X_neg[:, 0], X_neg[:, 1], color="r", marker=".")
-    plt.scatter(X_pos[:, 0], X_pos[:, 1], color="g", marker=".")
+    plt.xlim(-8, 8)
+    plt.ylim(-8, 8)
+    plt.scatter(X[y == -1, 0], X[y == -1, 1], marker=".")
+    plt.scatter(X[y == +1, 0], X[y == +1, 1], marker=".")
 
-    svm = SVM(kernel="rbf", C=100, iterations=100, sigma=5)
+    svm = SVM(kernel="rbf", C=100, sigma=5)
     svm.fit(X[training_set], y[training_set])
     y_pred = svm(X)
     acc = np.sum(y_pred[test_set] == y[test_set]) / len(test_set)
     print(f"Accuracy = {100 * acc:.2f}%")
 
-    X_neg, X_pos = X[y_pred == -1], X[y_pred == 1]
     plt.subplot(1, 3, 2)
     plt.title("Prediction")
-    plt.xlim(-7, 7)
-    plt.ylim(-7, 7)
-    plt.scatter(X_neg[:, 0], X_neg[:, 1], color="r", marker=".")
-    plt.scatter(X_pos[:, 0], X_pos[:, 1], color="g", marker=".")
+    plt.xlim(-8, 8)
+    plt.ylim(-8, 8)
+    plt.scatter(X[y_pred == -1, 0], X[y_pred == -1, 1], marker=".")
+    plt.scatter(X[y_pred == +1, 0], X[y_pred == +1, 1], marker=".")
 
     vectors = svm.support_vectors
     plt.subplot(1, 3, 3)
     plt.title("Support vectors")
-    plt.xlim(-7, 7)
-    plt.ylim(-7, 7)
-    plt.scatter(X_neg[:, 0], X_neg[:, 1], color="r", marker=".")
-    plt.scatter(X_pos[:, 0], X_pos[:, 1], color="g", marker=".")
-    plt.scatter(vectors[:, 0], vectors[:, 1], color="b", marker=".")
+    plt.xlim(-8, 8)
+    plt.ylim(-8, 8)
+    plt.scatter(X[y_pred == -1, 0], X[y_pred == -1, 1], marker=".")
+    plt.scatter(X[y_pred == +1, 0], X[y_pred == +1, 1], marker=".")
+    plt.scatter(vectors[:, 0], vectors[:, 1], marker=".")
 
     plt.show()
