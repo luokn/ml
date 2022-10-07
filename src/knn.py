@@ -27,7 +27,7 @@ class KNN:
         y_pred = np.zeros([len(X)], dtype=int)  # X对应的类别
         for i, x in enumerate(X):
             dist = LA.norm(self.X - x, axis=1)  # 计算x与所有已知类别点的距离
-            topk = np.argsort(dist)[: self.k]  # 取距离最小的k个点对应的索引
+            topk = np.argsort(dist)[:self.k]  # 取距离最小的k个点对应的索引
             y_pred[i] = np.bincount(self.y[topk]).argmax()  # 取近邻点最多的类别作为x的类别
         return y_pred
 

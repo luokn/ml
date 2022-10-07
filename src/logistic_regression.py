@@ -41,12 +41,10 @@ def sigmoid(x):
 
 
 def load_data(n_samples_per_class=500):
-    X = np.concatenate(
-        [
-            np.random.randn(n_samples_per_class, 2) + np.array([1, -1]),
-            np.random.randn(n_samples_per_class, 2) + np.array([-1, 1]),
-        ]
-    )
+    X = np.concatenate([
+        np.random.randn(n_samples_per_class, 2) + np.array([1, -1]),
+        np.random.randn(n_samples_per_class, 2) + np.array([-1, 1]),
+    ])
     y = np.array([0] * n_samples_per_class + [1] * n_samples_per_class)
 
     training_set, test_set = np.split(np.random.permutation(len(X)), [int(len(X) * 0.6)])
@@ -58,7 +56,7 @@ def train_logistic_regression(model, X, y, epochs=100, batch_size=32):
     for _ in range(epochs):
         np.random.shuffle(indices)
         for i in range(batch_size, len(X) + 1, batch_size):
-            model.fit(X[indices[i - batch_size : i]], y[indices[i - batch_size : i]])
+            model.fit(X[indices[i - batch_size:i]], y[indices[i - batch_size:i]])
 
 
 if __name__ == "__main__":

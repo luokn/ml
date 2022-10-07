@@ -3,7 +3,6 @@
 # @Author: Luokun
 # @Email : olooook@outlook.com
 
-
 import numpy as np
 
 
@@ -22,8 +21,8 @@ class EM:  # 三硬币模型
 
     def _expect(self, X: np.ndarray):  # E步
         p1, p2, p3 = self.prob
-        a = p1 * (p2 ** X) * ((1 - p2) ** (1 - X))
-        b = (1 - p1) * (p3 ** X) * ((1 - p3) ** (1 - X))
+        a = p1 * (p2**X) * ((1 - p2)**(1 - X))
+        b = (1 - p1) * (p3**X) * ((1 - p3)**(1 - X))
         return a / (a + b)
 
     def _maximize(self, X: np.ndarray, M: np.ndarray):  # M步
@@ -33,7 +32,6 @@ class EM:  # 三硬币模型
 
 
 # EM算法与高斯混合模型可参见./gmm.py
-
 
 if __name__ == "__main__":
     x = np.array([1, 1, 0, 1, 0, 0, 1, 0, 1, 1])

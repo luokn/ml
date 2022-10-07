@@ -35,13 +35,11 @@ class KMeans:
             y_pred = self(X)
 
             # 各类别的均值作为新的中心点,
-            centers = np.stack(
-                [
-                    # 存在元素属于类别i则计算类别i所有点的均值，否则随机选择一个点作为类别i的均值
-                    np.mean(X[y_pred == i], axis=0) if np.any(y_pred == i) else random.choice(X)
-                    for i in range(self.n_clusters)
-                ]
-            )
+            centers = np.stack([
+                # 存在元素属于类别i则计算类别i所有点的均值，否则随机选择一个点作为类别i的均值
+                np.mean(X[y_pred == i], axis=0) if np.any(y_pred == i) else random.choice(X)
+                for i in range(self.n_clusters)
+            ])
 
             # 中心点最大更新值小于eps则停止迭代
             if np.abs(self.centers - centers).max() < self.eps:

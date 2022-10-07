@@ -30,7 +30,7 @@ class LDA:
             S_W += (Xi - Mi).T @ (Xi - Mi)
             S_B += len(Xi) * (Mi - M).reshape(-1, 1) @ (Mi - M).reshape(1, -1)
         L, V = LA.eig(LA.inv(S_W) @ S_B)  # 计算 S_W^{-1} S_B 的特征值与特征向量
-        topk = np.argsort(L)[::-1][: self.k]  # 按照特征值降序排列，取前K大特征值
+        topk = np.argsort(L)[::-1][:self.k]  # 按照特征值降序排列，取前K大特征值
         self.W = V[:, topk]  # 选择topk对应的特征向量
 
     def __call__(self, X: np.ndarray):
@@ -52,7 +52,7 @@ class PCA:
     def __call__(self, X: np.ndarray):
         X_norm = X - X.mean(axis=0)  # 去中心化
         L, V = np.linalg.eig(X_norm.T @ X_norm)  # 对协方差矩阵进行特征值分解
-        topk = np.argsort(L)[::-1][: self.k]  # 找出前K大特征值对应的索引
+        topk = np.argsort(L)[::-1][:self.k]  # 找出前K大特征值对应的索引
         return X_norm @ V[:, topk]  # 将去中心化的X乘以前K大特征值对应的特征向量
 
 
@@ -60,12 +60,10 @@ def load_data(n_samlpes_per_class=500):
     theta = np.pi / 4
     scale = np.array([[2, 0], [0, 0.5]])  # 缩放
     rotate = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])  # 旋转
-    X = np.concatenate(
-        [
-            np.random.randn(n_samlpes_per_class, 2) + np.array([0, -2]),
-            np.random.randn(n_samlpes_per_class, 2) + np.array([0, +2]),
-        ]
-    )
+    X = np.concatenate([
+        np.random.randn(n_samlpes_per_class, 2) + np.array([0, -2]),
+        np.random.randn(n_samlpes_per_class, 2) + np.array([0, +2]),
+    ])
     X = X @ scale @ rotate  # 对数据进行缩放和旋转
     y = np.array([0] * n_samlpes_per_class + [1] * n_samlpes_per_class)
     return X, y

@@ -65,12 +65,10 @@ class GMM:
 
 
 def load_data(n_samples_per_class=500):
-    X = np.concatenate(
-        [
-            np.random.multivariate_normal(mean=[4, 0], cov=[[2, 0], [0, 2]], size=[n_samples_per_class]),
-            np.random.multivariate_normal(mean=[0, 4], cov=[[2, 0], [0, 2]], size=[n_samples_per_class]),
-        ]
-    )
+    X = np.concatenate([
+        np.random.multivariate_normal(mean=[4, 0], cov=[[2, 0], [0, 2]], size=[n_samples_per_class]),
+        np.random.multivariate_normal(mean=[0, 4], cov=[[2, 0], [0, 2]], size=[n_samples_per_class]),
+    ])
     y = np.array([0] * n_samples_per_class + [1] * n_samples_per_class)
     return X, y
 

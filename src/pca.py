@@ -22,18 +22,16 @@ class PCA:
     def __call__(self, X: np.ndarray):
         X_norm = X - X.mean(axis=0)  # 去中心化
         L, V = np.linalg.eig(X_norm.T @ X_norm)  # 对协方差矩阵进行特征值分解
-        topk = np.argsort(L)[::-1][: self.k]  # 找出前K大特征值对应的索引
+        topk = np.argsort(L)[::-1][:self.k]  # 找出前K大特征值对应的索引
         return X_norm @ V[:, topk]  # 将去中心化的X乘以前K大特征值对应的特征向量
 
 
 def load_data(n_samples_per_class=200):
-    X = np.concatenate(
-        [
-            np.random.randn(n_samples_per_class, 2) + np.array([2, 0]),
-            np.random.randn(n_samples_per_class, 2),
-            np.random.randn(n_samples_per_class, 2) + np.array([-2, 0]),
-        ]
-    )
+    X = np.concatenate([
+        np.random.randn(n_samples_per_class, 2) + np.array([2, 0]),
+        np.random.randn(n_samples_per_class, 2),
+        np.random.randn(n_samples_per_class, 2) + np.array([-2, 0]),
+    ])
     theta = np.pi / 4  # 逆时针旋转45°
     scale = np.diag([1.2, 0.5])  # 缩放矩阵
     rotate = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])  # 旋转矩阵

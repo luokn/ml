@@ -28,9 +28,8 @@ class NaiveBayesClassifier:
     def __call__(self, X: np.ndarray) -> np.ndarray:
         y_pred = np.zeros([len(X)], dtype=int)
         for i, x in enumerate(X):
-            P = np.log(self.P_prior) + np.array(
-                [np.log(p_cond[np.arange(len(x)), x]).sum() for p_cond in self.P_cond]
-            )  # 先验概率的对数,加上条件概率的对数
+            # 先验概率的对数,加上条件概率的对数
+            P = np.log(self.P_prior) + np.array([np.log(p_cond[np.arange(len(x)), x]).sum() for p_cond in self.P_cond])
             y_pred[i] = np.argmax(P)
         return y_pred
 
