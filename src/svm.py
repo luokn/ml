@@ -8,21 +8,24 @@ from matplotlib import pyplot as plt
 
 
 class LinearKernel:  # 线性核函数
+
     def __call__(self, a: np.ndarray, b: np.ndarray):
         return np.sum(a * b, axis=-1)
 
 
 class PolyKernel:  # 多项式核函数
+
     def __call__(self, a: np.ndarray, b: np.ndarray):
-        return (np.sum(a * b, axis=-1) + 1) ** 2
+        return (np.sum(a * b, axis=-1) + 1)**2
 
 
 class RBFKernel:  # 高斯核函数
+
     def __init__(self, sigma):
         self.divisor = 2 * sigma**2
 
     def __call__(self, a: np.ndarray, b: np.ndarray):
-        return np.exp(-np.sum((a - b) ** 2, axis=-1) / self.divisor)
+        return np.exp(-np.sum((a - b)**2, axis=-1) / self.divisor)
 
 
 class SVM:
@@ -43,9 +46,9 @@ class SVM:
 
         if kernel == "linear":
             self.K = LinearKernel()  # 线性核函数
-        if kernel == "poly":
+        elif kernel == "poly":
             self.K = PolyKernel()  # 多项式核函数
-        if kernel == "rbf":
+        elif kernel == "rbf":
             self.K = RBFKernel(sigma)  # 径向基核函数
 
         self.C, self.iterations, self.tol, self.alpha, self.b = C, iterations, tol, None, 0.0
