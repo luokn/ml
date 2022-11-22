@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Date  : 2020/5/27
-# @Author: Luokun
-# @Email : olooook@outlook.com
+# @File   : adaboost.py
+# @Data   : 2020/5/27
+# @Author : Luo Kun
+# @Contact: luokun485@gmail.com
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -9,7 +11,7 @@ from matplotlib import pyplot as plt
 
 class AdaBoost:
 
-    def __init__(self, n_estimators: int, lr=1e-2, eps=1e-5):
+    def __init__(self, n_estimators: int, lr: float = 1e-2, eps: float = 1e-5):
         """
         Args:
             n_estimators (int): 弱分类器个数.
@@ -53,17 +55,19 @@ class AdaBoost:
 
 class WeakEstimator:  # 弱分类器, 一阶决策树
 
-    def __init__(self, lr: float):
-        self.lr, self.feature, self.threshold, self.sign = lr, None, None, None  # 划分特征、划分阈值，符号{-1，1}
+    def __init__(self, lr: float = 1e-3):
+        # 学习率、符号{-1，1}、划分特征、划分阈值
+        self.lr, self.sign, self.feature, self.threshold, = lr, 1, None, None
 
     def fit(self, X: np.ndarray, y: np.ndarray, weights: np.ndarray):
-        min_error = float("inf")  # 最小带权误差
+        min_error = np.inf  # 最小带权误差
         for feature, x in enumerate(X.T):
             for threshold in np.arange(np.min(x) - self.lr, np.max(x) + self.lr, self.lr):
                 # 取分类错误的样本权重求和
                 pos_error = np.sum(weights[np.where(x > threshold, 1, -1) != y])
                 if pos_error < min_error:
                     min_error, self.feature, self.threshold, self.sign = pos_error, feature, threshold, 1
+
                 neg_error = 1 - pos_error
                 if neg_error < min_error:
                     min_error, self.feature, self.threshold, self.sign = neg_error, feature, threshold, -1

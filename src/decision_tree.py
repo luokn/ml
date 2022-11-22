@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Date  : 2020/5/23
-# @Author: Luokun
-# @Email : olooook@outlook.com
+# @File   : decision_tree.py
+# @Data   : 2020/5/23
+# @Author : Luo Kun
+# @Contact: luokun485@gmail.com
 
 import numpy as np
 

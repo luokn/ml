@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Date  : 2020/5/21
-# @Author: Luokun
-# @Email : olooook@outlook.com
+# @File   : kmeans.py
+# @Data   : 2020/5/21
+# @Author : Luo Kun
+# @Contact: luokun485@gmail.com
 
 import random
 

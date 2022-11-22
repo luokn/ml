@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Date  : 2020/5/31
-# @Author: Luokun
-# @Email : olooook@outlook.com
+# @File   : gmm.py
+# @Data   : 2020/5/31
+# @Author : Luo Kun
+# @Contact: luokun485@gmail.com
 
 import random
 

@@ -1,9 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @File  : utils.py
-# @Time  : 2022/05/18 15:11:16
-# @Author: Kun Luo
-# @Email : olooook@outlook.com
+# @File   : utils.py
+# @Data   : 2022/05/18
+# @Author : Luo Kun
+# @Contact: luokun485@gmail.com
 
 from typing import List, Optional
 

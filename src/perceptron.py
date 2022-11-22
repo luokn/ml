@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Date  : 2020/5/20
-# @Author: Luokun
-# @Email : olooook@outlook.com
+# @File   : perceptron.py
+# @Data   : 2020/5/20
+# @Author : Luo Kun
+# @Contact: luokun485@gmail.com
 
 import numpy as np
 from matplotlib import pyplot as plt
