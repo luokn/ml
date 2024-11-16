@@ -12,3 +12,4 @@
 [<img src="https://img.shields.io/badge/PCA-Code-30BB34?style=for-the-badge&logo=Numpy&logoColor=white"/>](src/pca.py)
 [<img src="https://img.shields.io/badge/Perceptron-Code-30BB34?style=for-the-badge&logo=Numpy&logoColor=white"/>](src/perceptron.py)
 [<img src="https://img.shields.io/badge/SVM-Code-30BB34?style=for-the-badge&logo=Numpy&logoColor=white"/>](src/svm.py)
+[<img src="https://img.shields.io/badge/Multinomial_Logistic_Regression-Code-30BB34?style=for-the-badge&logo=Numpy&logoColor=white"/>](src/multi_logistic_regression.py)
